@@ -1,2 +1,7 @@
 # CS-480-Project
-Inventory Management System using Postgres
+Taxi-Rental Management App
+
+
+Junyoung Jeong
+Prince Sonani
+Dane Nguyen
