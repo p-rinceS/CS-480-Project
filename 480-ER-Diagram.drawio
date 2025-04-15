@@ -47,12 +47,6 @@
             <mxPoint x="50" y="690" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="KhbVbLH3nvO56KjMJO7l-19" value="" style="endArrow=none;html=1;rounded=0;" parent="1" source="AeKrgfmqlPfzn_z32QxG-6" target="KhbVbLH3nvO56KjMJO7l-2" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="700" as="sourcePoint" />
-            <mxPoint x="150" y="730" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="KhbVbLH3nvO56KjMJO7l-21" value="" style="endArrow=none;html=1;rounded=0;" parent="1" source="KhbVbLH3nvO56KjMJO7l-2" target="AeKrgfmqlPfzn_z32QxG-7" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="10" y="710" as="sourcePoint" />
@@ -259,11 +253,8 @@
         <mxCell id="KhbVbLH3nvO56KjMJO7l-74" value="Review" style="shape=ext;margin=3;double=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffcc99;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="-260" y="10" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="AeKrgfmqlPfzn_z32QxG-6" value="address" style="ellipse;shape=doubleEllipse;margin=3;whiteSpace=wrap;html=1;align=center;comic=0;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=#cce5ff;" parent="1" vertex="1">
-          <mxGeometry x="-210" y="720" width="80" height="50" as="geometry" />
-        </mxCell>
         <mxCell id="AeKrgfmqlPfzn_z32QxG-7" value="credit_card" style="ellipse;shape=doubleEllipse;margin=3;whiteSpace=wrap;html=1;align=center;comic=0;strokeColor=default;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=#cce5ff;" parent="1" vertex="1">
-          <mxGeometry x="-190" y="800" width="80" height="50" as="geometry" />
+          <mxGeometry x="-190" y="700" width="80" height="50" as="geometry" />
         </mxCell>
         <mxCell id="AeKrgfmqlPfzn_z32QxG-13" value="&lt;span&gt;car_id&lt;/span&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#36393d;fontStyle=0" parent="1" vertex="1">
           <mxGeometry x="-210" y="310" width="80" height="50" as="geometry" />
