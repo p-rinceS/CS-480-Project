@@ -3,16 +3,16 @@
 CREATE SCHEMA taxiSchema;
 
 CREATE TABLE addresses (
-                           address_id SERIAL PRIMARY KEY,
-                           road_number VARCHAR(10) NOT NULL,
-                           city VARCHAR(100) NOT NULL
+       address_id SERIAL PRIMARY KEY,
+       road_number VARCHAR(10) NOT NULL,
+       city VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE credit_cards (
-                              card_id SERIAL PRIMARY KEY,
-                              credit_card_number VARCHAR(16) UNIQUE NOT NULL,
-                              billing_address_id INT NOT NULL,
-                              CONSTRAINT fk_billing_address FOREIGN KEY (billing_address_id) REFERENCES addresses(address_id)
+      card_id SERIAL PRIMARY KEY,
+      credit_card_number VARCHAR(16) UNIQUE NOT NULL,
+      billing_address_id INT NOT NULL,
+      CONSTRAINT fk_billing_address FOREIGN KEY (billing_address_id) REFERENCES addresses(address_id)
 );
 
 CREATE TABLE clients (
@@ -67,5 +67,11 @@ CREATE TABLE rent (
     client_id INT NOT NULL,
     CONSTRAINT fk_client_rent FOREIGN KEY (client_id) REFERENCES clients(client_id),
     CONSTRAINT fk_driver_rent FOREIGN KEY (driver_id) REFERENCES drivers(driver_id)
+);
+
+CREATE TABLE manager (
+    ssn VARCHAR(9) NOT NULL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
 );
 
