@@ -77,7 +77,7 @@ CREATE TABLE taxischema.model (
 );
 
 CREATE TABLE taxischema.manager (
-    ssn CHAR NOT NULL,
+    ssn CHAR(9) NOT NULL,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     PRIMARY KEY (ssn)
