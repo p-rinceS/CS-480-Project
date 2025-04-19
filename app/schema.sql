@@ -49,18 +49,11 @@ CREATE TABLE review (
 CREATE TABLE rent (
     rent_id SERIAL,
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (rent_id)
-);
-
--- N:M relationship between client and driver's rent
-CREATE TABLE client_driver_rent (
-    rent_id INT NOT NULL,
     client_id INT NOT NULL,
     driver_id INT NOT NULL,
-    PRIMARY KEY (client_id, driver_id),
-    FOREIGN KEY (client_id) REFERENCES client(client_id),
-    FOREIGN KEY (driver_id) REFERENCES driver(driver_id),
-    FOREIGN KEY (rent_id) REFERENCES rent(rent_id)
+    CONSTRAINT fk_rent_client FOREIGN KEY (client_id) REFERENCES client(client_id),
+    CONSTRAINT fk_rent_driver FOREIGN KEY (driver_id) REFERENCES driver(driver_id),
+    PRIMARY KEY (rent_id)
 );
 
 CREATE TABLE model (
