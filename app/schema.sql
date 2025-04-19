@@ -3,24 +3,22 @@ CREATE SCHEMA taxiSchema;
 CREATE TABLE address (
     address_id SERIAL,
     road_number INTEGER NOT NULL,
-    city VARCHAR(100) NOT NULL,
+    city VARCHAR NOT NULL,
     PRIMARY KEY (address_id)
 );
 
 CREATE TABLE credit_card (
     card_id SERIAL,
-    number VARCHAR(16) UNIQUE NOT NULL,
-    address_id INT NOT NULL,
+    number VARCHAR UNIQUE NOT NULL,
     client_id INT NOT NULL,
-    PRIMARY KEY (card_id),
-    CONSTRAINT fk_card_address FOREIGN KEY (address_id) REFERENCES address(address_id)
-    CONStRAINT fk_card_client FOREIGN KEY (client_id) REFERENCES client(client_id)
+    CONSTRAINT fk_card_client FOREIGN KEY (client_id) REFERENCES client(client_id),
+    PRIMARY KEY (card_id)
 );
 
 CREATE TABLE client (
     client_id SERIAL,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR NOT NULL,
+    email VARCHAR UNIQUE NOT NULL,
     card_id INT UNIQUE NOT NULL,
     address_id INT NOT NULL,
     PRIMARY KEY (client_id),
@@ -30,8 +28,8 @@ CREATE TABLE client (
 
 CREATE TABLE driver (
     driver_id SERIAL,
-    name VARCHAR(100) NOT NULL,
-    manager VARCHAR (100) NOT NULL,
+    name VARCHAR NOT NULL,
+    manager VARCHAR NOT NULL,
     address_id INT NOT NULL,
     PRIMARY KEY (driver_id),
     CONSTRAINT fk_driver_address FOREIGN KEY (address_id) REFERENCES address(address_id)
@@ -51,18 +49,25 @@ CREATE TABLE review (
 CREATE TABLE rent (
     rent_id SERIAL,
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    driver_id INT NOT NULL,
+    PRIMARY KEY (rent_id)
+);
+
+-- N:M relationship between client and driver's rent
+CREATE TABLE client_driver_rent (
+    rent_id INT NOT NULL,
     client_id INT NOT NULL,
-    PRIMARY KEY (rent_id),
-    CONSTRAINT fk_client_rent FOREIGN KEY (client_id) REFERENCES client(client_id),
-    CONSTRAINT fk_driver_rent FOREIGN KEY (driver_id) REFERENCES driver(driver_id)
+    driver_id INT NOT NULL,
+    PRIMARY KEY (client_id, driver_id),
+    FOREIGN KEY (client_id) REFERENCES client(client_id),
+    FOREIGN KEY (driver_id) REFERENCES driver(driver_id),
+    FOREIGN KEY (rent_id) REFERENCES rent(rent_id)
 );
 
 CREATE TABLE model (
     model_id SERIAL,
-    color VARCHAR(50) NOT NULL,
+    color VARCHAR NOT NULL,
     year INT NOT NULL,
-    transmission VARCHAR(50) NOT NULL,
+    transmission VARCHAR NOT NULL,
     car_id INT NOT NULL,
     rent_id INT NOT NULL,
     PRIMARY KEY (model_id, car_id),
@@ -71,18 +76,24 @@ CREATE TABLE model (
 
 CREATE TABLE car (
     car_id SERIAL,
-    brand VARCHAR(50) NOT NULL,
+    brand VARCHAR NOT NULL,
     model_id INT NOT NULL,
     driver_id INT NOT NULL,
-    PRIMARY KEY (car_id),
-    CONSTRAINT fk_car_model FOREIGN KEY (model_id) REFERENCES model(model_id),
-    CONSTRAINT fk_car_driver FOREIGN KEY (driver_id) REFERENCES driver(driver_id)
+    PRIMARY KEY (car_id)
+);
+
+-- N:M relationship between driver and car
+CREATE TABLE driver_car (
+    PRIMARY KEY (driver_id, car_id),
+    driver_id INT NOT NULL,
+    car_id INT NOT NULL,
+    FOREIGN KEY (driver_id) REFERENCES driver(driver_id),
+    FOREIGN KEY (car_id) REFERENCES car(car_id)
 );
 
 CREATE TABLE manager (
-    ssn CHAR(9) NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    PRIMARY KEY (ssn)
+    ssn CHAR NOT NULL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    email VARCHAR UNIQUE NOT NULL
 );
 
