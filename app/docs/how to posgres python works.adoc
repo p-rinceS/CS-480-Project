@@ -1,0 +1,22 @@
+# setting up postgres
+
+
+1) create a pgsql db server locally.
+
+2) make the credentials the same as below.
+
+### credentials
+- host = 127.0.0.1
+- default username = postgres
+- default password = password
+- database name  = postgres_db
+
+### How to run queries
+
+write a python function for a query in postgres_queries.py
+
+call that function in server.py on a api endpoint request
+
+you will need to create a new instance of connection via the following code:
+
+`connection = db_connection()`

@@ -1,8 +1,12 @@
+from doctest import debug
+
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
 from flask_restx import Api, Resource
 import os
-
+from postgres_server import db_connection, initialize_db
+from postgres_queries import get_all_clients
+# from postgres_queries import some queries functions we made
 app = Flask(__name__, static_folder='../client/dist', template_folder='../client/dist')
 # app = Flask(__name__)
 CORS(app)
@@ -22,7 +26,14 @@ def serve_react(path):
 @api.route('/api/test')
 class ExampleResource(Resource):
   def get(self):
-     return {"message":"test json"}
+    connection = db_connection()
+    if connection:
+      try:
+        get_all_clients(connection)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":"test json"}
 
 """
 ---- other example route for backend
@@ -34,4 +45,5 @@ class AuthResource(Resource):
 """
 
 if __name__ == "__main__":
+  initialize_db()
   app.run(debug=True)
