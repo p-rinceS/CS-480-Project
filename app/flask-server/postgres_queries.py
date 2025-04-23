@@ -40,7 +40,7 @@ def add_address(connection, road, number, city):
         cursor.close()
 
 
-def add_single_client(connection, name, email, home_road, home_number, home_city):
+def add_client(connection, name, email, home_road, home_number, home_city):
     try:
         cursor = connection.cursor()
         '''
@@ -56,6 +56,19 @@ def add_single_client(connection, name, email, home_road, home_number, home_city
         cursor.execute(query, (name, email, home_road, home_number, home_city))
         connection.commit()
         print("Client added successfully")
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        connection.rollback()
+    finally:
+        cursor.close()
+
+def remove_client(connection, email):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.client WHERE email = %s;"
+        cursor.execute(query, (email,))
+        connection.commit()
+        print("Client removed successfully")
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         connection.rollback()

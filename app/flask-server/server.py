@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from flask_restx import Api, Resource
 import os
 from postgres_server import db_connection, initialize_db
-from postgres_queries import get_all_clients, add_single_client, add_address
+from postgres_queries import get_all_clients, add_client, add_address, remove_client
 # from postgres_queries import some queries functions we made
 app = Flask(__name__, static_folder='../client/dist', template_folder='../client/dist')
 # app = Flask(__name__)
@@ -35,7 +35,6 @@ class ExampleResource(Resource):
         connection.close()
     return {"message":"test json"}
 
- # Add a single address
 @api.route('/api/test/add_address')
 class ExampleResource(Resource):
     def post(self):
@@ -51,7 +50,7 @@ class ExampleResource(Resource):
               print("Closing connection")
               connection.close()
           return {"message":"Address added successfully"}
-  # Add single client
+
 @api.route('/api/test/add_client')
 class ExampleResource(Resource):
   def post(self):
@@ -64,11 +63,25 @@ class ExampleResource(Resource):
         home_road = data.get('home_road')
         home_number = data.get('home_number')
         home_city = data.get('home_city')
-        add_single_client(connection, name, email, home_road, home_number, home_city)
+        add_client(connection, name, email, home_road, home_number, home_city)
       finally:
         print("Closing connection")
         connection.close()
     return {"message":"Client added successfully"}
+
+@api.route('/api/test/remove_client')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        email = data.get('email')
+        remove_client(connection, email)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":"Client removed successfully"}
 
 """
 ---- other example route for backend
