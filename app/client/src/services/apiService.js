@@ -6,12 +6,23 @@ const api = axios.create({
 });
 
 // Gets data from server and returns it
-export const getTest = async () => {
-  try {
-    const response = await api.get("test");
-    return response.data;
-  } catch (error) {
-    console.log("Error: ", error);
-    throw error;
-  }
-};
+// export const getTest = async () => {
+//   try {
+//     const response = await api.get("test");
+//     return response.data;
+//   } catch (error) {
+//     console.log("Error: ", error);
+//     throw error;
+//   }
+// };
+
+export const getClients = async () => {
+    try {
+        const response = await api.get("test/get_clients");
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}

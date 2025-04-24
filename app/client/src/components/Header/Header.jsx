@@ -9,6 +9,7 @@ const Header = () => {
       <button onClick={() => navigate("/")}>Home</button>
       <button onClick={() => navigate("/app")}>App</button>
       <button onClick={() => navigate("/test")}>Test</button>
+        <button onClick={() => navigate("/clients")}>Clients</button>
     </div>
   );
 };

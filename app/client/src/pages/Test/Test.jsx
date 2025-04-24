@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getTest } from "../../services/apiService";
+// import { getTest } from "../../services/apiService";
 
 const Test = () => {
   const [message, setMessage] = useState("");

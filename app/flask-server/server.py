@@ -23,7 +23,7 @@ def serve_react(path):
     return send_from_directory(app.static_folder, 'index.html')
 
 # example for /api/test route
-@api.route('/api/test')
+@api.route('/api/test/get_clients')
 class ExampleResource(Resource):
   def get(self):
     connection = db_connection()
