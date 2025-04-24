@@ -26,3 +26,17 @@ export const getClients = async () => {
         throw error;
     }
 }
+
+export const checkUserExists = async (role, identifier) => {
+    try {
+        const response = await api.post("check_user", {
+            role,
+            identifier
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}

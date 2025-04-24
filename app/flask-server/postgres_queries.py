@@ -16,7 +16,27 @@ def get_all_clients(connection):
     finally:
         cursor.close()
 
-
+def check_user_exists(connection, role, identifier):
+    try:
+        cursor = connection.cursor()
+        query = ""
+        if role == 'client':
+            query = "SELECT * FROM taxischema.client WHERE email = %s;"
+        elif role == 'driver':
+            query = "SELECT * FROM taxischema.driver WHERE name = %s;"
+        elif role == 'manager':
+            query = "SELECT * FROM taxischema.manager WHERE ssn = %s;"
+        cursor.execute(query, (identifier,))
+        result = cursor.fetchone()
+        if result:
+            return True
+        else:
+            return False
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return False
+    finally:
+        cursor.close()
 
 ### MUTATIONS ###
 
