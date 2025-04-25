@@ -81,11 +81,14 @@ export const addClientCreditCard = async (clientEmail, cardNumber, {
     }
 }
 
-export const deleteClientCreditCard = async (clientEmail, cardNumber) => {
+export const deleteClientCreditCard = async (clientEmail, cardNumber, billing_road, billing_number, billing_city) => {
     try {
         const response = await api.post("delete_client_credit_card", {
             client_email: clientEmail,
-            card_number: cardNumber
+            card_number: cardNumber,
+            billing_road: billing_road,
+            billing_number: billing_number,
+            billing_city: billing_city
         });
         console.log("Response: ", response);
         return response.data;

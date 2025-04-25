@@ -1,12 +1,8 @@
-from doctest import debug
 
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_restx import Api, Resource
 import os
-
-from unicodedata import digit
-
 from postgres_server import db_connection, initialize_db
 from postgres_queries import (get_all_clients,
                               add_client, add_address,
@@ -156,7 +152,10 @@ class ExampleResource(Resource):
         data = request.get_json()
         client_email = data.get('client_email')
         card_number = data.get('card_number')
-        result = remove_client_credit_card(connection, client_email, card_number)
+        billing_road = data.get('billing_road')
+        billing_number = data.get('billing_number')
+        billing_city = data.get('billing_city')
+        result = remove_client_credit_card(connection, client_email, card_number, billing_road, billing_number, billing_city)
         return jsonify(result)
       finally:
         print("Closing connection")

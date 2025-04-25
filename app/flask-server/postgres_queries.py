@@ -141,11 +141,34 @@ def add_client_credit_card(connection, email, card_number, billing_road, billing
     finally:
         cursor.close()
 
-def remove_client_credit_card(connection, email, card_number):
+def remove_client_credit_card(connection, email, card_number, billing_road, billing_number, billing_city):
     try:
         cursor = connection.cursor()
-        query = "DELETE FROM taxischema.credit_card WHERE client_email = %s AND number = %s;"
-        cursor.execute(query, (email, card_number))
+        # Step 1: Remove the credit card
+        delete_card_query = """
+        DELETE FROM taxischema.credit_card 
+        WHERE client_email = %s AND number = %s;
+        """
+        cursor.execute(delete_card_query, (email, card_number))
+        delete_address_query = """
+                WITH used_addresses AS (
+                    SELECT billing_road AS road, billing_number AS number, billing_city AS city
+                    FROM taxischema.credit_card
+                    UNION ALL
+                    SELECT home_road AS road, home_number AS number, home_city AS city
+                    FROM taxischema.client
+                )
+                DELETE FROM taxischema.address
+                WHERE road = %s AND number = %s AND city = %s
+                AND NOT EXISTS (
+                    SELECT 1 FROM used_addresses
+                    WHERE road = %s AND number = %s AND city = %s
+                );
+                """
+        cursor.execute(delete_address_query, (
+            billing_road, billing_number, billing_city,
+            billing_road, billing_number, billing_city
+        ))
         connection.commit()
         print("Client credit card removed successfully")
     except psycopg2.Error as e:

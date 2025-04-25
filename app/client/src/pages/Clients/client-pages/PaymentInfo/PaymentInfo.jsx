@@ -1,5 +1,5 @@
 import './PaymentInfo.css';
-import {addClientCreditCard, deleteClientCreditCard, getClientCreditCards} from "../../../../services/apiService.js";
+import {addClientCreditCard, getClientCreditCards} from "../../../../services/apiService.js";
 import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
 import {useEffect, useState} from "react";
 import CreditCard from "../../../../components/CreditCardComponent/CreditCard.jsx";
@@ -39,7 +39,7 @@ const PaymentInfo = () => {
     }
 
     useEffect(() => {
-        getPaymentInfoAPI().then(r => {
+        getPaymentInfoAPI().then(() => {
                 console.log("Payment Info fetched");
                 setLoading(false);
             }
@@ -62,7 +62,7 @@ const PaymentInfo = () => {
                             Add New Payment Method +</button>
                             <div className={'payment-cards'}>
                                 {
-                                    creditCards.map((card) => (
+                                    creditCards && creditCards.length > 0 && creditCards.map((card) => (
                                         <div key={card.number} className={'credit-card-container'}>
                                             <CreditCard card_email={card.client_email} billing_city={card.billing_city}
                                                         billing_number={card.billing_number}
@@ -70,8 +70,7 @@ const PaymentInfo = () => {
                                                         card_number={card.number}>
                                             </CreditCard>
                                         </div>
-                                        )
-                                    )
+                                    ))
                                 }
                             </div>
                         </>
