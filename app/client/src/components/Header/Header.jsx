@@ -84,6 +84,7 @@ const Header = () => {
                           <>
                               <div className={'header-tabs'}>
                                   <>
+                                      <button onClick={() => navigate("/")}>Home</button>
                                       <button onClick={() => navigate("/payment-info")}>My Payment Info</button>
                                       <button onClick={() => navigate("/rent-history")}>My Rental History</button>
                                       <button onClick={() => navigate("/write-a-review")}>Review a Driver</button>

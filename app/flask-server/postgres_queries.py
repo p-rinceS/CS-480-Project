@@ -41,6 +41,27 @@ def check_user_exists(connection, role, identifier):
     finally:
         cursor.close()
 
+def get_client_credit_cards(connection, client_email):
+    try:
+        cursor = connection.cursor()
+        query = """
+        SELECT * FROM taxischema.credit_card
+        WHERE client_email = %s;
+        """
+        cursor.execute(query, (client_email,))
+        result = cursor.fetchall()
+        if result:
+            columns = [desc[0] for desc in cursor.description]
+            result = [dict(zip(columns, row)) for row in result]
+            return {"credit_card": result}
+        else:
+            return False
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return False
+    finally:
+        cursor.close()
+
 ### MUTATIONS ###
 
 def add_address(connection, road, number, city):
@@ -92,6 +113,41 @@ def remove_client(connection, email):
         cursor.execute(query, (email,))
         connection.commit()
         print("Client removed successfully")
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        connection.rollback()
+    finally:
+        cursor.close()
+
+def add_client_credit_card(connection, email, card_number, billing_road, billing_number, billing_city):
+    try:
+        cursor = connection.cursor()
+        query = """
+        WITH inserted_address AS (
+            INSERT INTO taxischema.address (road, number, city)
+            VALUES (%s, %s, %s)
+            ON CONFLICT DO NOTHING
+        )
+        INSERT INTO taxischema.credit_card (client_email, number, billing_road, billing_number, billing_city)
+        VALUES (%s, %s, %s, %s, %s);
+        """
+        cursor.execute(query, (billing_road, billing_number, billing_city, email, card_number, billing_road, billing_number, billing_city))
+        connection.commit()
+        print("Client credit card added successfully")
+        return {"message": "Client credit card added successfully"}
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        connection.rollback()
+    finally:
+        cursor.close()
+
+def remove_client_credit_card(connection, email, card_number):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.credit_card WHERE client_email = %s AND number = %s;"
+        cursor.execute(query, (email, card_number))
+        connection.commit()
+        print("Client credit card removed successfully")
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         connection.rollback()

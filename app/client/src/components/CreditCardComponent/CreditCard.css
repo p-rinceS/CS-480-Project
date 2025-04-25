@@ -1,0 +1,29 @@
+.credit-card {
+    width: 50rem;
+    height: min-content;
+    background-color: rgb(14, 14, 14);
+    border-radius: 10px;
+    border: 1px solid rgb(103, 103, 103);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+}
+
+.delete-credit-card-button{
+    background-color: rgba(234, 71, 71, 0.74);
+}
+
+.delete-credit-card-button:hover{
+    background-color: rgba(234, 71, 71, 0.94);
+    border-color: #e4a6a6
+}
+
+.delete-credit-card-button:focus {
+    outline: none;
+}
+.delete-credit-card-button:active {
+    transform: scale(1.05);
+}

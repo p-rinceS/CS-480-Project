@@ -40,3 +40,57 @@ export const checkUserExists = async (role, identifier) => {
         throw error;
     }
 }
+
+
+export const getClientCreditCards = async (clientEmail) => {
+    try {
+        const response = await api.post("get_client_credit_cards", {
+            client_email: clientEmail
+        });
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+
+// number TEXT NOT NULL,
+// client_email TEXT NOT NULL,
+// billing_road TEXT NOT NULL,
+// billing_number INTEGER NOT NULL,
+// billing_city TEXT NOT NULL,
+export const addClientCreditCard = async (clientEmail, cardNumber, {
+    billingRoad,
+    billingNumber,
+    billingCity
+}) => {
+    try {
+        const response = await api.post("add_client_credit_card", {
+            client_email: clientEmail,
+            card_number: cardNumber,
+            billing_road: billingRoad,
+            billing_number: billingNumber,
+            billing_city: billingCity
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+export const deleteClientCreditCard = async (clientEmail, cardNumber) => {
+    try {
+        const response = await api.post("delete_client_credit_card", {
+            client_email: clientEmail,
+            card_number: cardNumber
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}

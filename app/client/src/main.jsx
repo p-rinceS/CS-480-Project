@@ -16,6 +16,7 @@ import Test from "./pages/Test/Test.jsx";
 import Clients from "./pages/Clients/Clients.jsx";
 import Login from "./pages/Login/Login.jsx";
 import getCookie from "./utils/getCookie.js";
+import PaymentInfo from "./pages/Clients/client-pages/PaymentInfo/PaymentInfo.jsx";
 
 
 
@@ -48,6 +49,7 @@ createRoot(document.getElementById("root")).render(
                     <Route path="/test" element={<PrivateRoute><Test /></PrivateRoute>} />
                     <Route path="/clients" element={<PrivateRoute><Clients /></PrivateRoute>} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/payment-info" element={<PrivateRoute><PaymentInfo/></PrivateRoute>} />
                 </Route>
             </Routes>
         </Router>
