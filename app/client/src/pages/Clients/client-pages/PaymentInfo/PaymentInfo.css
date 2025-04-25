@@ -1,0 +1,64 @@
+.payment-info-header {
+    display: flex;
+    justify-content: start;
+    gap: 5rem;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.payment-info-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-new-payment-method-button{
+    margin-bottom: 2rem;
+}
+
+.add-new-payment-method-text{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.add-payment-method-form{
+    margin-top: 2rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.card-number-label{
+    margin-right: 1rem;
+}
+.billing-road-label{
+    margin-right: 1rem;
+}
+.billing-number-label{
+    margin-right: 1rem;
+}
+
+.billing-city-label{
+    margin-right: 1rem;
+}
+
+.payment-cards{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.submit-credit-card-button{
+    background-color: #3A7734;
+}
+
+.submit-credit-card-button:hover{
+    background-color: #2A5A26;
+
+}

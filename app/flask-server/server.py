@@ -8,7 +8,13 @@ import os
 from unicodedata import digit
 
 from postgres_server import db_connection, initialize_db
-from postgres_queries import get_all_clients, add_client, add_address, remove_client, check_user_exists
+from postgres_queries import (get_all_clients,
+                              add_client, add_address,
+                              remove_client, check_user_exists,
+                              add_client_credit_card,
+                              get_client_credit_cards,
+                              remove_client_credit_card
+                              )
 
 # from postgres_queries import some queries functions we made
 app = Flask(__name__, static_folder='../client/dist', template_folder='../client/dist')
@@ -98,22 +104,64 @@ class ExampleResource(Resource):
         identifier = data.get('identifier')
 
         result = check_user_exists(connection, role, identifier)
-        print("Result:", result)  # result is now a dict
-        return jsonify(result)   # jsonify here
+        print("Result:", result)
+        return jsonify(result)
       except Exception as e:
         print("Error while connecting to PostgreSQL:", e)
       finally:
         print("Closing connection")
         connection.close()
     return {"message": "test json"}
-"""
----- other example route for backend
-@api.route('/api/auth')
-class AuthResource(Resource):
-  def get(self):
+
+@api.route('/api/add_client_credit_card')
+class ExampleResource(Resource):
   def post(self):
-  def delete(self):
-"""
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        card_number = data.get('card_number')
+        billing_road = data.get('billing_road')
+        billing_number = data.get('billing_number')
+        billing_city = data.get('billing_city')
+
+        result = add_client_credit_card(connection, client_email, card_number, billing_road, billing_number, billing_city)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":"Client credit card added successfully"}
+
+@api.route('/api/get_client_credit_cards')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        result = get_client_credit_cards(connection, client_email)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":" Could not get client credit cards"}
+
+@api.route('/api/delete_client_credit_card')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        card_number = data.get('card_number')
+        result = remove_client_credit_card(connection, client_email, card_number)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":"Client credit card deleted successfully"}
 
 if __name__ == "__main__":
   initialize_db()
