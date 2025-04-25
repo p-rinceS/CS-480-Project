@@ -3,3 +3,5 @@
 /target
 /project/target
 /.vscode/
+app/.DS_Store
+.DS_Store
