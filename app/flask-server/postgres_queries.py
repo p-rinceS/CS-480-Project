@@ -1,4 +1,5 @@
 import psycopg2
+from flask import jsonify
 
 
 ### QUERIES ###
@@ -29,7 +30,9 @@ def check_user_exists(connection, role, identifier):
         cursor.execute(query, (identifier,))
         result = cursor.fetchone()
         if result:
-            return True
+            columns = [desc[0] for desc in cursor.description]
+            result = dict(zip(columns, result))
+            return {"exists": True, "client": result}
         else:
             return False
     except psycopg2.Error as e:

@@ -27,7 +27,13 @@ const Login = () => {
             identify = name;
         } else if (role === "manager" && ssn) {
             identify = ssn;
-        } else {
+        }
+        else if (role === "admin") {
+            document.cookie = `role=${role}; path=/;`;
+            window.location.href = "/";
+            return;
+        }
+        else {
             alert("Invalid role or missing identifier");
             return;
         }
@@ -35,7 +41,7 @@ const Login = () => {
             const exists = await checkUserExists(role, identify);
             if (exists.exists) {
                 document.cookie = `role=${role}; path=/;`;
-                // navigate to '/'
+                document.cookie = `identity=${JSON.stringify(exists.client)}`;
                 window.location.href = "/";
             } else {
                 alert("User does not exist");

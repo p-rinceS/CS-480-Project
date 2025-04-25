@@ -97,12 +97,11 @@ class ExampleResource(Resource):
         role = data.get('role')
         identifier = data.get('identifier')
 
-        exists = check_user_exists(connection, role, identifier)
-
-        return jsonify({"exists": exists})
-
+        result = check_user_exists(connection, role, identifier)
+        print("Result:", result)  # result is now a dict
+        return jsonify(result)   # jsonify here
       except Exception as e:
-        print("Error while connecting to PostgreSQL", e)
+        print("Error while connecting to PostgreSQL:", e)
       finally:
         print("Closing connection")
         connection.close()

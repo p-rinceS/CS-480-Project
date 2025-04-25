@@ -32,7 +32,7 @@ const Clients = () => {
 
     return (
         <div className={"clients-container"}>
-            <LoadingSpinner loading={loading}></LoadingSpinner>
+            <div className={'loading-spinner-container'}><LoadingSpinner loading={loading}></LoadingSpinner></div>
             {clients.map((client) => (
                 <ClientCard key={client.id} client={client}/>
             ))}

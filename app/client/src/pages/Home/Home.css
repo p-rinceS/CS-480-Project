@@ -1,0 +1,12 @@
+.taxi-icon{
+    width: 100px;
+    height: 100px;
+}
+.taxi-icon:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+}
+.taxi-icon:active{
+    transform: scale(0.9);
+    transition: transform 0.1s;
+}
