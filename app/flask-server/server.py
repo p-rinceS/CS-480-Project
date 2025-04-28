@@ -122,6 +122,21 @@ class ExampleResource(Resource):
         connection.close()
     return {"message":"Client credit card added successfully"}
 
+@api.route('/api/get_available_cars')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        date = data.get('date')
+        result = get_available_cars(connection, date)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":" Could not get available cars"}
+
 @api.route('/api/get_client_credit_cards')
 class ExampleResource(Resource):
   def post(self):

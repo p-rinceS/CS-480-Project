@@ -1,0 +1,40 @@
+.car-card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    padding: 1rem;
+    justify-content: space-between; /* Space out content evenly */
+    align-items: center;
+    border-radius: 8px;
+    background-color: rgba(165, 165, 165, 0.35); /* Light background for a sleek look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border: 1px solid #d0d7de; /* Light border for structure */
+    text-align: center;
+    font-family: Arial, sans-serif; /* Clean font */
+}
+
+.car-status-available {
+    background-color: #28a745; /* GitHub green */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.car-status-unavailable {
+    background-color: #d73a49; /* GitHub red */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.car-card-container div {
+    font-size: 0.9rem;
+    color: #ffffff; /* Neutral text color */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+    white-space: nowrap; /* Prevent wrapping */
+}

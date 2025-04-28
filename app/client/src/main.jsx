@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -21,6 +20,7 @@ import PaymentInfo from "./pages/Clients/client-pages/PaymentInfo/PaymentInfo.js
 import ManageCars from "./pages/Managers/ManageCars/ManageCars.jsx";
 import ManageClients from "./pages/Managers/ManageClients/ManageClients.jsx";
 import ManageDrivers from "./pages/Managers/ManageDrivers/ManageDrivers.jsx";
+import ViewAvailableCars from "./pages/Clients/client-pages/ViewAvailableCars/ViewAvailableCars.jsx";
 
 const isAuthenticated = () => {
   return !!getCookie("role"); // Check if the 'role' cookie exists
@@ -35,7 +35,7 @@ const PrivateRoute = ({ children }) => {
 const PageLayout = () => (
   <div>
     <Header />
-    <div>
+    <div className={'page-outlet'}>
       <Outlet />
     </div>
   </div>
@@ -90,6 +90,7 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+          <Route path={"/available-cars"} element={<ViewAvailableCars/>}/>
       </Route>
     </Routes>
   </Router>

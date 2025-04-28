@@ -227,3 +227,28 @@ def remove_car(connection, car_id):
         return None
     finally:
         cursor.close()
+
+def get_available_cars(connection, input_date):
+    try:
+        cursor = connection.cursor()
+
+        query = """
+        SELECT DISTINCT c.car_id, c.brand, m.model_id, m.color, m.year, m.transmission
+        FROM taxischema.car c
+        JOIN taxischema.model m ON c.car_id = m.car_id
+        WHERE c.car_id NOT IN (
+            SELECT r.car_id
+            FROM taxischema.rent r
+            WHERE DATE(r.date) = %s
+        );
+        """
+
+        cursor.execute(query, (input_date,))
+        results = cursor.fetchall()
+        return results
+
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()

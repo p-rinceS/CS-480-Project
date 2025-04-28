@@ -5,17 +5,6 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Gets data from server and returns it
-// export const getTest = async () => {
-//   try {
-//     const response = await api.get("test");
-//     return response.data;
-//   } catch (error) {
-//     console.log("Error: ", error);
-//     throw error;
-//   }
-// };
-
 export const getModels = async () => {
   try {
     const response = await api.get("models");
@@ -71,11 +60,6 @@ export const getClientCreditCards = async (clientEmail) => {
   }
 };
 
-// number TEXT NOT NULL,
-// client_email TEXT NOT NULL,
-// billing_road TEXT NOT NULL,
-// billing_number INTEGER NOT NULL,
-// billing_city TEXT NOT NULL,
 export const addClientCreditCard = async (
   clientEmail,
   cardNumber,
@@ -119,3 +103,19 @@ export const deleteClientCreditCard = async (
     throw error;
   }
 };
+
+export const getAvailableCars = async (
+    date
+) => {
+    try {
+        const response = await api.post("get_available_cars", {
+            date: date,
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+
+}

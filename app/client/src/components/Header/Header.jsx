@@ -71,7 +71,7 @@ const Header = () => {
                 <button onClick={() => navigate("/write-a-review")}>
                   Review a Driver
                 </button>
-                <button onClick={() => navigate("/view-available-cars")}>
+                <button onClick={() => navigate("/available-cars")}>
                   View Cars
                 </button>
                 <button onClick={() => navigate("/book-rent")}>
