@@ -167,7 +167,7 @@ class ModelResource(Resource):
     except:
       return ('Error getting data', 400)
     
-  def get(self):
+  def delete(self):
     data = request.json
     model_id = data.get('modelId')
     connection = db_connection()

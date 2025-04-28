@@ -71,19 +71,11 @@ button:focus-visible {
   transform: scale(1.05);
 }
 
-#page {
-  display: flex;
-  flex-direction: column;
-}
-
-#body {
-  flex: 1;
-}
-
 body {
   padding: 0;
   margin: 0;
   width: 100%;
+  min-height: 100%;
   justify-content: center;
 }
 

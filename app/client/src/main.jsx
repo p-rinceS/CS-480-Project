@@ -33,9 +33,9 @@ const PrivateRoute = ({ children }) => {
 
 // Shows header on every page
 const PageLayout = () => (
-  <div id="page">
+  <div>
     <Header />
-    <div id="body">
+    <div>
       <Outlet />
     </div>
   </div>
