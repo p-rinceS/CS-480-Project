@@ -1,0 +1,22 @@
+#manage-cars-page {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.list {
+  border-radius: 8px;
+  width: 40%;
+  padding: 2rem;
+  justify-content: right;
+  background-color: gray;
+}
+
+.delete-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

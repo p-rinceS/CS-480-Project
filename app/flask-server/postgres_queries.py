@@ -1,5 +1,4 @@
 import psycopg2
-from flask import jsonify
 
 
 ### QUERIES ###
@@ -59,6 +58,32 @@ def get_client_credit_cards(connection, client_email):
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         return False
+    finally:
+        cursor.close()
+
+def get_all_models(connection):
+    try:
+        cursor = connection.cursor()
+        query = "SELECT * FROM taxischema.model;"
+        cursor.execute(query)
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def get_all_cars(connection):
+    try:
+        cursor = connection.cursor()
+        query = "SELECT * FROM taxischema.car;"
+        cursor.execute(query)
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
     finally:
         cursor.close()
 
@@ -174,5 +199,31 @@ def remove_client_credit_card(connection, email, card_number, billing_road, bill
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         connection.rollback()
+    finally:
+        cursor.close()
+
+def remove_model(connection, model_id):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.model WHERE model_id = %s;"
+        cursor.execute(query, (model_id))
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def remove_car(connection, car_id):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.car WHERE car_id = %s;"
+        cursor.execute(query, (car_id))
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
     finally:
         cursor.close()

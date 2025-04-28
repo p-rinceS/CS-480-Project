@@ -1,41 +1,30 @@
-.header-tabs{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+.header-tabs {
+  display: flex;
+  gap: 1rem;
 }
 
 .login-button {
-    top: 1rem;
-    right: 1rem;
-    background-color: rgba(26, 26, 26, 0.06);
-    color: white;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
+  background-color: rgba(26, 26, 26, 0.06);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .hello-user-text {
-    top: 1rem;
-    left: 1rem;
-    color: white;
-    font-size: 1rem;
-    margin: 0;
+  color: white;
+  font-size: 1rem;
+  margin: 0;
 }
 
 .header-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    box-sizing: border-box;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 4rem;
-    z-index: 1000;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }

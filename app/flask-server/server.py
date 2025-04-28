@@ -4,13 +4,7 @@ from flask_cors import CORS
 from flask_restx import Api, Resource
 import os
 from postgres_server import db_connection, initialize_db
-from postgres_queries import (get_all_clients,
-                              add_client, add_address,
-                              remove_client, check_user_exists,
-                              add_client_credit_card,
-                              get_client_credit_cards,
-                              remove_client_credit_card
-                              )
+from postgres_queries import *
 
 # from postgres_queries import some queries functions we made
 app = Flask(__name__, static_folder='../client/dist', template_folder='../client/dist')
@@ -161,6 +155,48 @@ class ExampleResource(Resource):
         print("Closing connection")
         connection.close()
     return {"message":"Client credit card deleted successfully"}
+
+# ----------------------- MANAGER API ROUTES -----------------------
+@api.route('/api/models')
+class ModelResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+      result = get_all_models(connection)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+    
+  def get(self):
+    data = request.json
+    model_id = data.get('modelId')
+    connection = db_connection()
+    try:
+      result = remove_model(connection, model_id)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+    
+@api.route('/api/cars')
+class CarResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+      result = get_all_cars(connection)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+  
+  def delete(self):
+    data = request.json
+    car_id = data.get('carId')
+    connection = db_connection()
+    try:
+      result = remove_car(connection, car_id)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+      
 
 if __name__ == "__main__":
   initialize_db()

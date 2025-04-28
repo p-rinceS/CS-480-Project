@@ -3,10 +3,11 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 
 import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    Outlet, Navigate,
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Outlet,
+  Navigate,
 } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
 
@@ -17,41 +18,79 @@ import Clients from "./pages/Clients/Clients.jsx";
 import Login from "./pages/Login/Login.jsx";
 import getCookie from "./utils/getCookie.js";
 import PaymentInfo from "./pages/Clients/client-pages/PaymentInfo/PaymentInfo.jsx";
-
-
-
+import ManageCars from "./pages/Managers/ManageCars/ManageCars.jsx";
+import ManageClients from "./pages/Managers/ManageClients/ManageClients.jsx";
+import ManageDrivers from "./pages/Managers/ManageDrivers/ManageDrivers.jsx";
 
 const isAuthenticated = () => {
-    return !!getCookie("role"); // Check if the 'role' cookie exists
+  return !!getCookie("role"); // Check if the 'role' cookie exists
 };
 
 // PrivateRoute component
 const PrivateRoute = ({ children }) => {
-    return isAuthenticated() ? children : <Navigate to="/login" />;
+  return isAuthenticated() ? children : <Navigate to="/login" />;
 };
 
 // Shows header on every page
 const PageLayout = () => (
-  <>
+  <div id="page">
     <Header />
-    <Outlet />
-  </>
+    <div id="body">
+      <Outlet />
+    </div>
+  </div>
 );
 
 // Usage in routes
 createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <Router>
-            <Routes>
-                <Route element={<PageLayout />}>
-                    <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-                    <Route path="/app" element={<PrivateRoute><App /></PrivateRoute>} />
-                    <Route path="/test" element={<PrivateRoute><Test /></PrivateRoute>} />
-                    <Route path="/clients" element={<PrivateRoute><Clients /></PrivateRoute>} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/payment-info" element={<PrivateRoute><PaymentInfo/></PrivateRoute>} />
-                </Route>
-            </Routes>
-        </Router>
-    </StrictMode>
+  <Router>
+    <Routes>
+      <Route element={<PageLayout />}>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/app"
+          element={
+            <PrivateRoute>
+              <App />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <PrivateRoute>
+              <Test />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <PrivateRoute>
+              <Clients />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/manage-cars" element={<ManageCars />} />
+        <Route path="/manage-clients" element={<ManageClients />} />
+        <Route path="/manage-drivers" element={<ManageDrivers />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/payment-info"
+          element={
+            <PrivateRoute>
+              <PaymentInfo />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+    </Routes>
+  </Router>
 );

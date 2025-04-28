@@ -1,0 +1,25 @@
+.model-list {
+  padding: 0;
+}
+
+.model-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.select-model {
+  display: flex;
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.model-title {
+  margin: 0;
+}

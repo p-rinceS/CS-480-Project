@@ -2,13 +2,13 @@
   "sqltools.connections": [
     {
       "previewLimit": 50,
-      "server": "localhost",
+      "server": "127.0.0.1",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "Postgres Local",
+      "name": "postgres_db",
+      "database": "postgres",
       "username": "postgres",
-      "database": "proj480",
-      "password": ""
+      "password": "password"
     }
   ]
 }
