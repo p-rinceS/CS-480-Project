@@ -153,3 +153,17 @@ export const getRentalHistory = async (client_email) => {
         throw error;
     }
 }
+
+export const addDriverModel = async (driverName, model_id, car_id) => {
+  try {
+    const response = await api.post("driver/models", {
+      driver_name: driverName,
+      model_id,
+      car_id,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};

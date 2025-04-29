@@ -30,7 +30,7 @@ const MyReviews = () => {
         <ul className="review-list">
           {reviews.map(({ reviewId, message, rating }) => (
             <li key={reviewId} className="review-item">
-              <div className="rating">⭐ {rating} / 5</div>
+              <div className="rating"> {rating} / 5</div>
               <p className="message">{message}</p>
             </li>
           ))}

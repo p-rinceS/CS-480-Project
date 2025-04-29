@@ -308,3 +308,16 @@ def book_rent(connection, client_email, car_id, model_id, date):
         connection.rollback()
     finally:
         cursor.close()
+
+def get_all_drivers(connection):
+    try:
+        cursor = connection.cursor()
+        query = "SELECT * FROM taxischema.driver;"
+        cursor.execute(query)
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()

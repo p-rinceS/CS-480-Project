@@ -10,7 +10,7 @@ import { getModels, declareModelForDriver } from "../../../services/apiService";
 
 const ManageDrivers = () => {
   const [models, setModels] = useState([]);
-  const [declaredModels, setDeclaredModels] = useState(new Set());
+  const [declaredModels, addDriverModel] = useState(new Set());
 
   // Fetch car models and populate state
   const fetchModels = async () => {
@@ -32,7 +32,7 @@ const ManageDrivers = () => {
   const handleDeclareModel = async (modelId) => {
     if (declaredModels.has(modelId)) return; // already declared
     await declareModelForDriver(modelId); // API call
-    setDeclaredModels((prev) => new Set(prev).add(modelId));
+    addDriverModel((prev) => new Set(prev).add(modelId));
   };
 
   return (

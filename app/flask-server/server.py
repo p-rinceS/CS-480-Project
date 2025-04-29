@@ -246,6 +246,27 @@ class CarResource(Resource):
     except:
       return ('Error getting data', 400)
 
+@api.route('/api/driver/models')
+class DriverModelResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        driver_name = data.get('driver_name')
+        model_id = data.get('model_id')
+        car_id = data.get('car_id')
+
+        add_driver_model(connection, driver_name, model_id, car_id)
+        return {"message": "Driver model declared successfully"}
+      except Exception as e:
+        print("Error while declaring driver model:", e)
+        return {"message": "Error while declaring driver model"}, 500
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message": "No database connection"}, 500
+
 
 if __name__ == "__main__":
   initialize_db()
