@@ -80,6 +80,61 @@ export const deleteCar = async (carId) => {
   }
 };
 
+export const getDrivers = async () => {
+  try {
+    const response = await api.get("drivers");
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const addDriver = async (name, homeRoad, homeNumber, homeCity) => {
+  console.log("Adding Driver " + name);
+  try {
+    const response = await api.post("drivers", {
+      name: name,
+      homeRoad: homeRoad,
+      homeNumber: homeNumber,
+      homeCity: homeCity,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteDriver = async (name) => {
+  try {
+    const response = await api.delete("drivers", { data: { name: name } });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getKClients = async (k) => {
+  try {
+    const response = await api.get("clients", { params: { k: k } });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getCityClients = async (city1, city2) => {
+  try {
+    const response = await api.get("clients", {
+      params: { city1: city1, city2: city2 },
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
 export const getRents = async () => {
   try {
     const response = await api.get("rents");

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../Manager.css";
 import "./ManageCars.css";
 import {
   addCar,
@@ -9,13 +10,6 @@ import {
   getModels,
 } from "../../../services/apiService";
 import Popup from "../../../components/Popup/Popup";
-
-/**
- * Managers should be able to insert or remove cars or models in the system
- *
- * Managers should be able to generate a list containing every current car model and
- * next to it the number of rents it has been used.
- */
 
 const ManageCars = () => {
   const [models, setModels] = useState([]);
@@ -37,7 +31,7 @@ const ManageCars = () => {
       brand,
       rents,
     }));
-    return mappedCars;
+    setCars(mappedCars);
   };
 
   // Fetches models and sets the state
@@ -53,18 +47,12 @@ const ManageCars = () => {
         rents,
       })
     );
-    return mappedModels;
+    setModels(mappedModels);
   };
 
   // Fetches data and updates it with rent info
   const fetchAllData = async () => {
-    const [fetchedCars, fetchedModels] = await Promise.all([
-      fetchCars(),
-      fetchModels(),
-    ]);
-
-    setCars(fetchedCars);
-    setModels(fetchedModels);
+    await Promise.all([fetchCars(), fetchModels()]);
   };
 
   // Fetches models and cars at start
@@ -116,7 +104,7 @@ const ManageCars = () => {
 
   return (
     <>
-      <div id="manage-cars-page">
+      <div className="manager-page">
         <div id="car-display" className="list">
           <h2>Cars</h2>
           <button className="add-button" onClick={() => setShowCarPopup(true)}>

@@ -3,7 +3,8 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_restx import Api, Resource
 import os
-import datetime
+from datetime import datetime
+from decimal import Decimal
 from postgres_server import db_connection, initialize_db
 from postgres_queries import *
 
@@ -163,7 +164,7 @@ class ModelResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = select_all_models_with_rents(connection)
+      result = select_all_models_and_rents(connection)
       return (result, 200)
     except:
       return ('Error getting data', 400)
@@ -179,24 +180,24 @@ class ModelResource(Resource):
       result = insert_model(connection, color, year, transmission, car_id)
       return (result, 200)
     except:
-      return ('Error getting data', 400)
+      return ('Error posting data', 400)
     
   def delete(self):
-    data = request.get_json()
-    model_id = data.get('modelId')
     connection = db_connection()
     try:
+      data = request.get_json()
+      model_id = data.get('modelId')
       result = delete_model(connection, model_id)
       return (result, 200)
     except:
-      return ('Error getting data', 400)
+      return ('Error deleting data', 400)
     
 @api.route('/api/cars')
 class CarResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = select_all_cars_with_rents(connection)
+      result = select_all_cars_and_rents(connection)
       return (result, 200)
     except:
       return ('Error getting data', 400)
@@ -209,17 +210,79 @@ class CarResource(Resource):
       result = insert_car(connection, brand)
       return (result, 200)
     except:
-      return ('Error getting data', 400)
+      return ('Error posting data', 400)
   
   def delete(self):
-    data = request.get_json()
-    car_id = data.get('carId')
     connection = db_connection()
     try:
+      data = request.get_json()
+      car_id = data.get('carId')
       result = delete_car(connection, car_id)
       return (result, 200)
     except:
+      return ('Error deleting data', 400)
+    
+@api.route('/api/drivers')
+class DriverResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+
+      result = select_all_drivers_and_rents_rating(connection)
+      # Convert datetimes to isoformat so they can be serialized
+      processed_result = []
+      for driver in result:
+        processed_tuple = tuple(
+          float(item) if isinstance(item, Decimal) else item
+          for item in driver
+        )
+        processed_result.append(processed_tuple)
+      return (processed_result, 200)
+    except:
       return ('Error getting data', 400)
+    
+  def post(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      name = data.get('name')
+      home_road = data.get('homeRoad')
+      home_number = data.get('homeNumber')
+      home_city = data.get('homeCity')
+      print(name)
+      result = insert_driver(connection, name, home_road, home_number, home_city)
+      return (result, 200)
+    except:
+      return ('Error posting data', 400)
+    
+  def delete(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      name = data.get('name')
+      result = delete_driver(connection, name)
+      return (result, 200)
+    except:
+      return ('Error deleting data', 400)
+    
+@api.route('/api/clients')
+class ClientResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+      data = request.args
+      k = data.get('k')
+      city1 = data.get('city1')
+      city2 = data.get('city2')
+      if k is not None:
+        result = get_top_k_rent_clients(connection, k)
+        return (result, 200)
+      else:
+        result = get_city_clients(connection, city1, city2)
+        return (result, 200)
+    except:
+      return ('Error getting data', 400)
+
     
 @api.route('/api/rents')
 class RentResource(Resource):
@@ -232,7 +295,7 @@ class RentResource(Resource):
       processed_result = []
       for rent in result:
         processed_tuple = tuple(
-          item.isoformat() if isinstance(item, datetime.datetime) else item
+          item.isoformat() if isinstance(item, datetime) else item
           for item in rent
         )
         processed_result.append(processed_tuple)

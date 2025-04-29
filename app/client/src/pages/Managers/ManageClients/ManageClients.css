@@ -1,0 +1,40 @@
+#client-display {
+  width: 100%;
+}
+
+.client-filters {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.form-submit {
+  padding: 0.1rem;
+  margin: 0;
+}
+
+.client-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.client-info {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  padding: 0.5em 1.2em;
+}
+
+.client-header {
+  margin: 0;
+  min-width: 30%;
+  text-align: left;
+}
