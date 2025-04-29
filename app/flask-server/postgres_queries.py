@@ -490,3 +490,36 @@ def get_all_drivers(connection):
         return None
     finally:
         cursor.close()
+
+def get_drivers_that_have_rented(connection, client_email):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT DISTINCT r.driver_name
+            FROM taxischema.rent r
+            WHERE r.client_email = %s
+        """
+        cursor.execute(query, (client_email,))
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def write_review(connection, client_email, driver_name, rating, message):
+    try:
+        cursor = connection.cursor()
+        query = """
+            INSERT INTO taxischema.review (client_email, driver_name, rating, message)
+            VALUES (%s, %s, %s, %s);
+        """
+        cursor.execute(query, (client_email, driver_name, rating, message))
+        connection.commit()
+        print("Review written successfully")
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        connection.rollback()
+    finally:
+        cursor.close()

@@ -170,6 +170,19 @@ export const getClientCreditCards = async (clientEmail) => {
   }
 };
 
+
+export const getAllDriversThatRented = async (client_email) => {
+    try {
+        const response = await api.post("drivers_that_were_rented", {
+            client_email: client_email
+        });
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
 export const addClientCreditCard = async (
   clientEmail,
   cardNumber,
@@ -257,6 +270,40 @@ export const getRentalHistory = async (client_email) => {
             client_email: client_email,
         });
         console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+export const getDriverReviews = async (driver_email) => {
+    //placeholder
+}
+
+export const getReviewableDrivers = async (client_email) => {
+    try {
+        const response = await api.post("get_reviewable_drivers", {
+            client_email: client_email,
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+export const writeReview = async (client_email, driver, rating, message) => {
+    try {
+        const response = await api.post("write_review", {
+            client_email: client_email,
+            driver: driver,
+            rating: rating,
+            message: message,
+        });
+        console.log("Response: ", response);
+        window.location.reload()
         return response.data;
     } catch (error) {
         console.log("Error: ", error);

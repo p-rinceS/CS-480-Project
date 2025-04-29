@@ -3,6 +3,7 @@ import {getRentalHistory} from "../../../../services/apiService.js";
 import {useEffect, useState} from "react";
 import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
 import RentalHistoryCard from "../../../../components/RentalHistoryCard/RentalHistoryCard.jsx";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner.jsx";
 
 
 
@@ -18,7 +19,7 @@ const RentalHistory = () => {
             (response) => {
                 const mappedHistory = Array.isArray(response)
                     ? response.map(rent => ({
-                        car: rent[0],
+                        car: rent[1],
                         carDriver: rent[6],
                         carModel: rent[2],
                         carYear: rent[4],
@@ -59,6 +60,8 @@ const RentalHistory = () => {
                             rent_id={rent.rent_id}                        />
                     ))}
             </div>
+            <LoadingSpinner loading={loading}/>
+
             <div className={'upcoming-rents'}>
                 <h2>Upcoming Rentals</h2>
                 {rentalHistory

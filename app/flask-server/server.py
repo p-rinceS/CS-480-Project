@@ -207,6 +207,40 @@ class ExampleResource(Resource):
         print("Closing connection")
         connection.close()
     return {"message":" Could not get rental history"}
+
+@api.route('/api/drivers_that_were_rented')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        result = get_drivers_that_have_rented(connection, client_email)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":" Could not get driver"}
+
+@api.route('/api/write_review')
+class ExampleResource(Resource):
+    def post(self):
+        connection = db_connection()
+        if connection:
+          try:
+              data = request.get_json()
+              client_email = data.get('client_email')
+              driver_name = data.get('driver')
+              rating = data.get('rating')
+              review = data.get('message')
+              result = write_review(connection, client_email, driver_name, rating, review)
+              return jsonify(result)
+          finally:
+              print("Closing connection")
+              connection.close()
+        return {"message":" Could not write review"}
+
 # ----------------------- MANAGER API ROUTES -----------------------
 @api.route('/api/models')
 class ModelResource(Resource):
@@ -372,7 +406,6 @@ class DriverModelResource(Resource):
         print("Closing connection")
         connection.close()
     return {"message": "No database connection"}, 500
-
 
 if __name__ == "__main__":
   initialize_db()

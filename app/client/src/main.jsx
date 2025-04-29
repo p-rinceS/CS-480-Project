@@ -22,6 +22,8 @@ import ManageClients from "./pages/Managers/ManageClients/ManageClients.jsx";
 import ManageDrivers from "./pages/Managers/ManageDrivers/ManageDrivers.jsx";
 import BookRent from "./pages/Clients/client-pages/ViewAvailableCars/BookRent.jsx";
 import RentalHistory from "./pages/Clients/client-pages/RentalHistory/RentalHistory.jsx";
+import MyReviews from "./pages/Drivers/MyReviews/MyReviews.jsx";
+import WriteReviews from "./pages/Clients/client-pages/WriteReviews/WriteReviews.jsx";
 
 const isAuthenticated = () => {
   return !!getCookie("role"); // Check if the 'role' cookie exists
@@ -128,6 +130,7 @@ createRoot(document.getElementById("root")).render(
           }
         />
         <Route path="/login" element={<Login />} />
+          <Route path={'/write-a-review'} element={<WriteReviews/>}></Route>
       </Route>
     </Routes>
   </Router>
