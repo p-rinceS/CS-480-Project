@@ -34,12 +34,12 @@ const PrivateRoute = ({ children }) => {
 
 // Shows header on every page
 const PageLayout = () => (
-  <div>
+  <>
     <Header />
-    <div className={'page-outlet'}>
+    <div id="page">
       <Outlet />
     </div>
-  </div>
+  </>
 );
 
 // Usage in routes
@@ -91,8 +91,8 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
-          <Route path={"/book-rent"} element={<BookRent/>}/>
-          <Route path={"/rent-history"} element={<RentalHistory/>}/>
+        <Route path={"/book-rent"} element={<BookRent />} />
+        <Route path={"/rent-history"} element={<RentalHistory />} />
       </Route>
     </Routes>
   </Router>

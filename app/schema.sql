@@ -55,26 +55,26 @@ CREATE TABLE IF NOT EXISTS taxischema.car (
 );
 
 CREATE TABLE IF NOT EXISTS taxischema.model (
-        model_id INT NOT NULL,
-        color TEXT NOT NULL,
-        year INT NOT NULL,
-        transmission TEXT NOT NULL,
-        car_id INT NOT NULL,
-        CONSTRAINT fk_model_car FOREIGN KEY (car_id) REFERENCES taxischema.car(car_id) ON UPDATE CASCADE ON DELETE CASCADE,
-        PRIMARY KEY (model_id, car_id)
+  model_id SERIAL,
+  color TEXT NOT NULL,
+  year INT NOT NULL,
+  transmission TEXT NOT NULL,
+  car_id INT NOT NULL,
+  CONSTRAINT fk_model_car FOREIGN KEY (car_id) REFERENCES taxischema.car(car_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  PRIMARY KEY (model_id, car_id)
 );
 
 CREATE TABLE IF NOT EXISTS taxischema.rent (
-           rent_id SERIAL,
-           date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-           client_email TEXT NOT NULL,
-           driver_name TEXT NOT NULL,
-           model_id INT NOT NULL,
-           car_id INT NOT NULL,
-           CONSTRAINT fk_rent_client FOREIGN KEY (client_email) REFERENCES taxischema.client(email) ON UPDATE CASCADE ON DELETE CASCADE,
-           CONSTRAINT fk_rent_driver FOREIGN KEY (driver_name) REFERENCES taxischema.driver(name) ON UPDATE CASCADE ON DELETE CASCADE,
-           CONSTRAINT fk_rent_model FOREIGN KEY (model_id, car_id) REFERENCES taxischema.model(model_id, car_id) ON UPDATE CASCADE ON DELETE CASCADE,
-           PRIMARY KEY (rent_id)
+  rent_id SERIAL,
+  date TIMESTAMP NOT NULL,
+  client_email TEXT NOT NULL,
+  driver_name TEXT NOT NULL,
+  model_id INT NOT NULL,
+  car_id INT NOT NULL,
+  CONSTRAINT fk_rent_client FOREIGN KEY (client_email) REFERENCES taxischema.client(email) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_rent_driver FOREIGN KEY (driver_name) REFERENCES taxischema.driver(name) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_rent_model FOREIGN KEY (model_id, car_id) REFERENCES taxischema.model(model_id, car_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  PRIMARY KEY (rent_id)
 );
 
 CREATE TABLE IF NOT EXISTS taxischema.manager (

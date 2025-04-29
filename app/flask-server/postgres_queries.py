@@ -16,6 +16,55 @@ def get_all_clients(connection):
     finally:
         cursor.close()
 
+def get_top_k_rent_clients(connection, k):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT name, email
+            FROM taxischema.client
+            ORDER BY (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.client_email = client.email
+            ) DESC, name ASC
+            LIMIT %s;"""
+        cursor.execute(query, (k,))
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def get_city_clients(connection, city1, city2):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT name, email
+            FROM taxischema.client
+            WHERE client.email IN (
+                SELECT client_email
+                FROM taxischema.client_address
+                WHERE client_address.home_city = %s
+            ) AND client.email IN (
+                SELECT client_email
+                FROM taxischema.rent
+                WHERE rent.driver_name IN (
+                    SELECT name
+                    FROM taxischema.driver
+                    WHERE driver.home_city = %s
+                )
+            );"""
+        cursor.execute(query, (city1, city2))
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
 def check_user_exists(connection, role, identifier):
     try:
         cursor = connection.cursor()
@@ -61,10 +110,16 @@ def get_client_credit_cards(connection, client_email):
     finally:
         cursor.close()
 
-def get_all_models(connection):
+def select_all_cars_and_rents(connection):
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM taxischema.model;"
+        query = """
+            SELECT *, (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.car_id = car.car_id
+            ) as rents
+            FROM taxischema.car;"""
         cursor.execute(query)
         results = cursor.fetchall()
         return results
@@ -74,10 +129,16 @@ def get_all_models(connection):
     finally:
         cursor.close()
 
-def get_all_cars(connection):
+def select_all_models_and_rents(connection):
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM taxischema.car;"
+        query = """
+            SELECT *, (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.model_id = model.model_id
+            ) as rents
+            FROM taxischema.model;"""
         cursor.execute(query)
         results = cursor.fetchall()
         return results
@@ -86,6 +147,43 @@ def get_all_cars(connection):
         return None
     finally:
         cursor.close()
+
+def select_all_drivers_and_rents_rating(connection):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT *, (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.driver_name = driver.name
+            ) as rents, (
+                SELECT ROUND(avg(rating), 1)
+                FROM taxischema.review
+                WHERE review.driver_name = driver.name
+            ) as avg_rating
+            FROM taxischema.driver;"""
+        cursor.execute(query)
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def select_all_rents(connection):
+    try:
+        cursor = connection.cursor()
+        query = "SELECT * FROM taxischema.rent;"
+        cursor.execute(query)
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
 
 ### MUTATIONS ###
 
@@ -202,11 +300,12 @@ def remove_client_credit_card(connection, email, card_number, billing_road, bill
     finally:
         cursor.close()
 
-def remove_model(connection, model_id):
+def insert_car(connection, brand):
     try:
         cursor = connection.cursor()
-        query = "DELETE FROM taxischema.model WHERE model_id = %s;"
-        cursor.execute(query, (model_id))
+        query = 'INSERT INTO taxischema.car (brand) VALUES (%s);'
+        cursor.execute(query, (brand,))
+        connection.commit()
         results = cursor.rowcount > 0
         return results
     except psycopg2.Error as e:
@@ -215,11 +314,81 @@ def remove_model(connection, model_id):
     finally:
         cursor.close()
 
-def remove_car(connection, car_id):
+def delete_car(connection, car_id):
     try:
         cursor = connection.cursor()
         query = "DELETE FROM taxischema.car WHERE car_id = %s;"
-        cursor.execute(query, (car_id))
+        cursor.execute(query, (car_id,))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def insert_model(connection, color, year, transmission, car_id):
+    try:
+        cursor = connection.cursor()
+        query ='''
+            INSERT INTO taxischema.model (color, year, transmission, car_id)
+            VALUES (%s, %s, %s, %s);'''
+        cursor.execute(query, (color, year, transmission, car_id))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def delete_model(connection, model_id):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.model WHERE model_id = %s;"
+        cursor.execute(query, (model_id,))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def insert_driver(connection, name, home_road, home_number, home_city):
+    try:
+        cursor = connection.cursor()
+        query1 ='''
+            INSERT INTO taxischema.address (road, number, city)
+            SELECT %s, %s, %s
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM taxischema.address
+                WHERE road = %s AND number = %s AND city = %s
+            )'''
+        query2 = '''
+            INSERT INTO taxischema.driver (name, home_road, home_number, home_city)
+            VALUES (%s, %s, %s, %s);'''
+        cursor.execute(query1, (home_road, home_number, home_city, home_road, home_number, home_city))
+        cursor.execute(query2, (name, home_road, home_number, home_city))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+def delete_driver(connection, name):
+    try:
+        cursor = connection.cursor()
+        query = "DELETE FROM taxischema.driver WHERE name = %s;"
+        cursor.execute(query, (name,))
+        connection.commit()
         results = cursor.rowcount > 0
         return results
     except psycopg2.Error as e:

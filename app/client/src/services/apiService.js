@@ -1,4 +1,5 @@
 import axios from "axios";
+import { data } from "react-router-dom";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:5000/api",
@@ -14,9 +15,118 @@ export const getModels = async () => {
   }
 };
 
+export const addModel = async (transmission, color, year, carId) => {
+  try {
+    const response = await api.post("models", {
+      transmission: transmission,
+      color: color,
+      year: year,
+      carId: carId,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteModel = async (modelId) => {
+  try {
+    const response = await api.delete("models", {
+      data: {
+        modelId: modelId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
 export const getCars = async () => {
   try {
     const response = await api.get("cars");
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const addCar = async (brand) => {
+  try {
+    const response = await api.post("cars", { brand: brand });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteCar = async (carId) => {
+  try {
+    const response = await api.delete("cars", { data: { carId: carId } });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getDrivers = async () => {
+  try {
+    const response = await api.get("drivers");
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const addDriver = async (name, homeRoad, homeNumber, homeCity) => {
+  console.log("Adding Driver " + name);
+  try {
+    const response = await api.post("drivers", {
+      name: name,
+      homeRoad: homeRoad,
+      homeNumber: homeNumber,
+      homeCity: homeCity,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteDriver = async (name) => {
+  try {
+    const response = await api.delete("drivers", { data: { name: name } });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getKClients = async (k) => {
+  try {
+    const response = await api.get("clients", { params: { k: k } });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getCityClients = async (city1, city2) => {
+  try {
+    const response = await api.get("clients", {
+      params: { city1: city1, city2: city2 },
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getRents = async () => {
+  try {
+    const response = await api.get("rents");
     return response.data;
   } catch (error) {
     console.log("Error: ", error);

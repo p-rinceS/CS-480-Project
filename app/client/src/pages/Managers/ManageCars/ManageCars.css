@@ -1,22 +1,56 @@
-#manage-cars-page {
-  display: flex;
-  justify-content: center;
-  gap: 4rem;
-}
-
-h2 {
-  margin-top: 0;
-}
-
-.list {
-  border-radius: 8px;
+#car-display {
   width: 40%;
-  padding: 2rem;
-  justify-content: right;
-  background-color: gray;
 }
 
-.delete-button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+.car-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.select-car {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.car-header {
+  margin: 0;
+  min-width: 30%;
+  text-align: left;
+}
+
+#model-display {
+  width: 60%;
+}
+
+.model-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.model-info {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  padding: 0.5em 1.2em;
+}
+
+.model-header {
+  margin: 0;
+  min-width: 30%;
+  text-align: left;
 }

@@ -1,0 +1,49 @@
+h2 {
+  margin-bottom: 2rem;
+}
+
+#driver-display {
+  width: 100%;
+}
+
+.driver-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.driver-info {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  padding: 0.5em 1.2em;
+}
+
+.driver-name-header {
+  margin: 0;
+  min-width: 25%;
+  text-align: left;
+}
+
+.driver-address-header {
+  margin: 0;
+  min-width: 50%;
+  text-align: left;
+}
+
+.driver-rent-header {
+  margin: 0;
+  min-width: 15%;
+  text-align: left;
+}
+
+.driver-rating-header {
+  margin: 0;
+  min-width: 10%;
+  text-align: left;
+}

@@ -19,8 +19,7 @@
 }
 
 .header-container {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  min-height: 10%;
   display: flex;
   box-sizing: border-box;
   flex-direction: row;
