@@ -1,4 +1,5 @@
 import axios from "axios";
+import { data } from "react-router-dom";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:5000/api",
@@ -25,9 +26,63 @@ export const getModels = async () => {
   }
 };
 
+export const addModel = async (transmission, color, year, carId) => {
+  try {
+    const response = await api.post("models", {
+      transmission: transmission,
+      color: color,
+      year: year,
+      carId: carId,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteModel = async (modelId) => {
+  try {
+    const response = await api.delete("models", {
+      data: {
+        modelId: modelId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
 export const getCars = async () => {
   try {
     const response = await api.get("cars");
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const addCar = async (brand) => {
+  try {
+    const response = await api.post("cars", { brand: brand });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteCar = async (carId) => {
+  try {
+    const response = await api.delete("cars", { data: { carId: carId } });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getRents = async () => {
+  try {
+    const response = await api.get("rents");
     return response.data;
   } catch (error) {
     console.log("Error: ", error);

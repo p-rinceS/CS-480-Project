@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -33,12 +32,12 @@ const PrivateRoute = ({ children }) => {
 
 // Shows header on every page
 const PageLayout = () => (
-  <div>
+  <>
     <Header />
-    <div>
+    <div id="page">
       <Outlet />
     </div>
-  </div>
+  </>
 );
 
 // Usage in routes

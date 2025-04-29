@@ -1,22 +1,105 @@
 #manage-cars-page {
   display: flex;
+  box-sizing: border-box;
+  max-height: 100%;
+  height: 100%;
   justify-content: center;
   gap: 4rem;
-}
-
-h2 {
-  margin-top: 0;
+  padding-bottom: 2rem;
 }
 
 .list {
-  border-radius: 8px;
-  width: 40%;
+  position: relative;
+  box-sizing: border-box;
+  max-height: 100%;
+  height: 100%;
   padding: 2rem;
+  border-radius: 8px;
   justify-content: right;
   background-color: gray;
+  overflow-y: auto;
+}
+
+h2 {
+  margin: 0 auto;
+}
+
+.add-button {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  margin-left: auto;
+}
+
+#car-display {
+  width: 40%;
+}
+
+.car-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.select-car {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.car-header {
+  margin: 0;
+  min-width: 30%;
+  text-align: left;
+}
+
+#model-display {
+  width: 60%;
+}
+
+.model-list-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  justify-self: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+}
+
+.model-info {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  padding: 0 1.2em;
+}
+
+.model-header {
+  margin: 0;
+  min-width: 30%;
+  text-align: left;
 }
 
 .delete-button {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.popup-elements {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.form-submit {
+  margin-top: 2rem;
 }

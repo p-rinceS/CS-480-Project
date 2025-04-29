@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_restx import Api, Resource
 import os
+import datetime
 from postgres_server import db_connection, initialize_db
 from postgres_queries import *
 
@@ -162,17 +163,33 @@ class ModelResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = get_all_models(connection)
+      result = select_all_models(connection)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+    
+  def post(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      color = data.get('color')
+      year = data.get('year')
+      transmission = data.get('transmission')
+      car_id = data.get('carId')
+      result = insert_model(connection, color, year, transmission, car_id)
       return (result, 200)
     except:
       return ('Error getting data', 400)
     
   def delete(self):
-    data = request.json
+    print("EGSEGSG")
+    data = request.get_json()
+    print("EGSEGSG")
     model_id = data.get('modelId')
+    print(model_id)
     connection = db_connection()
     try:
-      result = remove_model(connection, model_id)
+      result = delete_model(connection, model_id)
       return (result, 200)
     except:
       return ('Error getting data', 400)
@@ -182,18 +199,47 @@ class CarResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = get_all_cars(connection)
+      result = select_all_cars(connection)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
+    
+  def post(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      brand = data.get('brand')
+      result = insert_car(connection, brand)
       return (result, 200)
     except:
       return ('Error getting data', 400)
   
   def delete(self):
-    data = request.json
+    data = request.get_json()
     car_id = data.get('carId')
     connection = db_connection()
     try:
-      result = remove_car(connection, car_id)
+      result = delete_car(connection, car_id)
       return (result, 200)
+    except:
+      return ('Error getting data', 400)
+    
+@api.route('/api/rents')
+class RentResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+      result = select_all_rents(connection)
+
+      # Convert datetimes to isoformat so they can be serialized
+      processed_result = []
+      for rent in result:
+        processed_tuple = tuple(
+          item.isoformat() if isinstance(item, datetime.datetime) else item
+          for item in rent
+        )
+        processed_result.append(processed_tuple)
+      return (processed_result, 200)
     except:
       return ('Error getting data', 400)
       

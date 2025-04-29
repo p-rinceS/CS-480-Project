@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS taxischema.car (
 );
 
 CREATE TABLE IF NOT EXISTS taxischema.model (
-  model_id INT NOT NULL,
+  model_id SERIAL,
   color TEXT NOT NULL,
   year INT NOT NULL,
   transmission TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS taxischema.model (
 
 CREATE TABLE IF NOT EXISTS taxischema.rent (
   rent_id SERIAL,
-  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date TIMESTAMP NOT NULL,
   client_email TEXT NOT NULL,
   driver_name TEXT NOT NULL,
   model_id INT NOT NULL,
