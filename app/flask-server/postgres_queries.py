@@ -233,22 +233,78 @@ def get_available_cars(connection, input_date):
         cursor = connection.cursor()
 
         query = """
-        SELECT DISTINCT c.car_id, c.brand, m.model_id, m.color, m.year, m.transmission
-        FROM taxischema.car c
-        JOIN taxischema.model m ON c.car_id = m.car_id
-        WHERE c.car_id NOT IN (
-            SELECT r.car_id
-            FROM taxischema.rent r
-            WHERE DATE(r.date) = %s
-        );
+            SELECT DISTINCT c.car_id, c.brand, m.model_id, m.color, m.year, m.transmission
+            FROM taxischema.car c
+            JOIN taxischema.model m ON c.car_id = m.car_id
+            JOIN taxischema.driver_model dm ON m.model_id = dm.model_id AND c.car_id = dm.car_id
+            WHERE dm.driver_name NOT IN (
+                SELECT r.driver_name
+                FROM taxischema.rent r
+                WHERE DATE(r.date) = %s
+            )
+            AND c.car_id NOT IN (
+                SELECT r.car_id
+                FROM taxischema.rent r
+                WHERE DATE(r.date) = %s
+            );
         """
 
-        cursor.execute(query, (input_date,))
+        cursor.execute(query, (input_date, input_date))
         results = cursor.fetchall()
         return results
 
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         return None
+    finally:
+        cursor.close()
+
+def get_past_rents(connection, email):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT r.car_id, c.brand, m.model_id, m.color, m.year, m.transmission, 
+                   r.driver_name, r.date, r.rent_id
+            FROM taxischema.rent r
+            JOIN taxischema.client cl ON r.client_email = cl.email
+            JOIN taxischema.model m ON r.model_id = m.model_id AND r.car_id = m.car_id
+            JOIN taxischema.car c ON m.car_id = c.car_id
+            WHERE cl.email = %s;
+        """
+        cursor.execute(query, (email,))
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
+
+def book_rent(connection, client_email, car_id, model_id, date):
+    try:
+        cursor = connection.cursor()
+        query = """
+            WITH available_driver AS (
+                SELECT DISTINCT dm.driver_name
+                FROM taxischema.driver_model dm
+                WHERE dm.model_id = %s
+                AND dm.driver_name NOT IN (
+                    SELECT r.driver_name
+                    FROM taxischema.rent r
+                    WHERE DATE(r.date) = %s
+                )
+                LIMIT 1
+            )
+            INSERT INTO taxischema.rent (client_email, car_id, model_id, driver_name, date)
+            VALUES (%s, %s, %s, (SELECT driver_name FROM available_driver), %s);
+        """
+        cursor.execute(query, (model_id, date, client_email, car_id, model_id, date))
+        connection.commit()
+        print("Rent booked successfully")
+        return {"message": "Rent booked successfully"}
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        connection.rollback()
     finally:
         cursor.close()

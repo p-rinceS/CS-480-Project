@@ -1,3 +1,4 @@
+from sys import api_version
 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -102,6 +103,7 @@ class ExampleResource(Resource):
         print("Closing connection")
         connection.close()
     return {"message": "test json"}
+# ----------------------- CLIENT API ROUTES -----------------------
 
 @api.route('/api/add_client_credit_card')
 class ExampleResource(Resource):
@@ -171,6 +173,38 @@ class ExampleResource(Resource):
         connection.close()
     return {"message":"Client credit card deleted successfully"}
 
+@api.route('/api/book_rent')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        car_id = data.get('car_id')
+        model_id = data.get('model_id')
+        date = data.get('date')
+        result = book_rent(connection, client_email, car_id, model_id, date)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":" Could not book rent"}
+
+@api.route('/api/get_rental_history')
+class ExampleResource(Resource):
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        client_email = data.get('client_email')
+        result = get_past_rents(connection, client_email)
+        return jsonify(result)
+      finally:
+        print("Closing connection")
+        connection.close()
+    return {"message":" Could not get rental history"}
 # ----------------------- MANAGER API ROUTES -----------------------
 @api.route('/api/models')
 class ModelResource(Resource):
@@ -211,7 +245,7 @@ class CarResource(Resource):
       return (result, 200)
     except:
       return ('Error getting data', 400)
-      
+
 
 if __name__ == "__main__":
   initialize_db()

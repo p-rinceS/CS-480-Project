@@ -119,3 +119,37 @@ export const getAvailableCars = async (
     }
 
 }
+
+export const bookRent = async (
+    car_id,
+    model_id,
+    client_email,
+    date
+) => {
+    try {
+        const response = await api.post("book_rent", {
+            car_id: car_id,
+            model_id: model_id,
+            client_email: client_email,
+            date: date,
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+export const getRentalHistory = async (client_email) => {
+    try {
+        const response = await api.post("get_rental_history", {
+            client_email: client_email,
+        });
+        console.log("Response: ", response);
+        return response.data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}

@@ -1,0 +1,35 @@
+.rental-history-card {
+    display: flex;
+    flex-direction: row; /* Make the card horizontal */
+    gap: 2rem; /* Add space between sections */
+    padding: 1rem;
+    border: 1px solid #d0d7de; /* Light border for structure */
+    border-radius: 8px;
+    background-color: rgba(69, 71, 71, 0.37); /* Light background for contrast */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    font-family: Arial, sans-serif; /* Clean font */
+    align-items: center; /* Center items vertically */
+}
+
+.car-details, .rental-details {
+    display: flex;
+    flex-direction: column; /* Stack fields vertically */
+    gap: 0.5rem; /* Add space between fields */
+}
+
+.car-details h3, .rental-details h3 {
+    margin-bottom: 0.5rem; /* Add space below section titles */
+    font-size: 1.2rem;
+    color: #ffffff; /* Darker text for titles */
+}
+
+.car-details p, .rental-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #ffffff; /* Softer text for details */
+}
+
+.rental-history-card p span {
+    font-weight: bold; /* Highlight labels */
+    color: #ffffff; /* Darker text for labels */
+}

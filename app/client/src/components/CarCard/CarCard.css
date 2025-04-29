@@ -1,9 +1,9 @@
 .car-card-container {
     display: flex;
     flex-direction: row;
-    gap: 3rem;
+    gap: 3rem; /* Space between items */
     padding: 1rem;
-    justify-content: space-between; /* Space out content evenly */
+    justify-content: end; /* Space out content evenly */
     align-items: center;
     border-radius: 8px;
     background-color: rgba(165, 165, 165, 0.35); /* Light background for a sleek look */
@@ -37,4 +37,14 @@
     overflow: hidden; /* Prevent overflow */
     text-overflow: ellipsis; /* Add ellipsis for long text */
     white-space: nowrap; /* Prevent wrapping */
+}
+
+.book-button{
+    margin-left: 3rem;
+}
+
+.card-header-container{
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
 }

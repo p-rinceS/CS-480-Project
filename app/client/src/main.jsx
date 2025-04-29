@@ -20,7 +20,8 @@ import PaymentInfo from "./pages/Clients/client-pages/PaymentInfo/PaymentInfo.js
 import ManageCars from "./pages/Managers/ManageCars/ManageCars.jsx";
 import ManageClients from "./pages/Managers/ManageClients/ManageClients.jsx";
 import ManageDrivers from "./pages/Managers/ManageDrivers/ManageDrivers.jsx";
-import ViewAvailableCars from "./pages/Clients/client-pages/ViewAvailableCars/ViewAvailableCars.jsx";
+import BookRent from "./pages/Clients/client-pages/ViewAvailableCars/BookRent.jsx";
+import RentalHistory from "./pages/Clients/client-pages/RentalHistory/RentalHistory.jsx";
 
 const isAuthenticated = () => {
   return !!getCookie("role"); // Check if the 'role' cookie exists
@@ -90,7 +91,8 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
-          <Route path={"/available-cars"} element={<ViewAvailableCars/>}/>
+          <Route path={"/book-rent"} element={<BookRent/>}/>
+          <Route path={"/rent-history"} element={<RentalHistory/>}/>
       </Route>
     </Routes>
   </Router>
