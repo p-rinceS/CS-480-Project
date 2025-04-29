@@ -79,10 +79,30 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
-        <Route path="/manage-cars" element={<ManageCars />} />
-        <Route path="/manage-clients" element={<ManageClients />} />
-        <Route path="/manage-drivers" element={<ManageDrivers />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/manage-cars"
+          element={
+            <PrivateRoute>
+              <ManageCars />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/manage-clients"
+          element={
+            <PrivateRoute>
+              <ManageClients />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/manage-drivers"
+          element={
+            <PrivateRoute>
+              <ManageDrivers />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/payment-info"
           element={
@@ -91,8 +111,23 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
-        <Route path={"/book-rent"} element={<BookRent />} />
-        <Route path={"/rent-history"} element={<RentalHistory />} />
+        <Route
+          path={"/book-rent"}
+          element={
+            <PrivateRoute>
+              <BookRent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={"/rent-history"}
+          element={
+            <PrivateRoute>
+              <RentalHistory />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
       </Route>
     </Routes>
   </Router>
