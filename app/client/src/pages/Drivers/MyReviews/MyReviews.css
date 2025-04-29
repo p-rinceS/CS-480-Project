@@ -1,0 +1,31 @@
+#my-reviews-page {
+    padding: 1rem;
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .review-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .review-item {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f9f9f9;
+  }
+  
+  .rating {
+    font-weight: bold;
+    color: #ffaa00;
+    margin-bottom: 0.5rem;
+  }
+  
+  .message {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
