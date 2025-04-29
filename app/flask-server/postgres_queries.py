@@ -61,10 +61,16 @@ def get_client_credit_cards(connection, client_email):
     finally:
         cursor.close()
 
-def select_all_cars(connection):
+def select_all_cars_with_rents(connection):
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM taxischema.car;"
+        query = """
+            SELECT *, (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.car_id = car.car_id
+            ) as rents
+            FROM taxischema.car;"""
         cursor.execute(query)
         results = cursor.fetchall()
         return results
@@ -74,10 +80,16 @@ def select_all_cars(connection):
     finally:
         cursor.close()
 
-def select_all_models(connection):
+def select_all_models_with_rents(connection):
     try:
         cursor = connection.cursor()
-        query = "SELECT * FROM taxischema.model;"
+        query = """
+            SELECT *, (
+                SELECT count(*)
+                FROM taxischema.rent
+                WHERE rent.model_id = model.model_id
+            ) as rents
+            FROM taxischema.model;"""
         cursor.execute(query)
         results = cursor.fetchall()
         return results

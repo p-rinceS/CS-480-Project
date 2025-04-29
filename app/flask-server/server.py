@@ -163,7 +163,7 @@ class ModelResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = select_all_models(connection)
+      result = select_all_models_with_rents(connection)
       return (result, 200)
     except:
       return ('Error getting data', 400)
@@ -182,11 +182,8 @@ class ModelResource(Resource):
       return ('Error getting data', 400)
     
   def delete(self):
-    print("EGSEGSG")
     data = request.get_json()
-    print("EGSEGSG")
     model_id = data.get('modelId')
-    print(model_id)
     connection = db_connection()
     try:
       result = delete_model(connection, model_id)
@@ -199,7 +196,7 @@ class CarResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-      result = select_all_cars(connection)
+      result = select_all_cars_with_rents(connection)
       return (result, 200)
     except:
       return ('Error getting data', 400)

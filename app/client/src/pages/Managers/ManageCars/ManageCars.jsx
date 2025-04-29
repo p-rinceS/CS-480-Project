@@ -7,7 +7,6 @@ import {
   deleteModel,
   getCars,
   getModels,
-  getRents,
 } from "../../../services/apiService";
 import Popup from "../../../components/Popup/Popup";
 
@@ -30,28 +29,13 @@ const ManageCars = () => {
 
   const [transmission, setTransmission] = useState();
 
-  // Fetches rents and sets the state
-  const fetchRents = async () => {
-    const rentResponse = await getRents();
-    const mappedRents = rentResponse.map(
-      ([rentId, date, clientEmail, driverName, modelId, carId]) => ({
-        rentId,
-        date,
-        clientEmail,
-        driverName,
-        modelId,
-        carId,
-      })
-    );
-    return mappedRents;
-  };
-
   // Fetches cars and sets the state
   const fetchCars = async () => {
     const carResponse = await getCars();
-    const mappedCars = carResponse.map(([carId, brand]) => ({
+    const mappedCars = carResponse.map(([carId, brand, rents]) => ({
       carId,
       brand,
+      rents,
     }));
     return mappedCars;
   };
@@ -60,12 +44,13 @@ const ManageCars = () => {
   const fetchModels = async () => {
     const modelResponse = await getModels();
     const mappedModels = modelResponse.map(
-      ([modelId, color, year, transmission, carId]) => ({
+      ([modelId, color, year, transmission, carId, rents]) => ({
         modelId,
         color,
         year,
         transmission,
         carId,
+        rents,
       })
     );
     return mappedModels;
@@ -73,30 +58,10 @@ const ManageCars = () => {
 
   // Fetches data and updates it with rent info
   const fetchAllData = async () => {
-    const [fetchedRents, fetchedCars, fetchedModels] = await Promise.all([
-      fetchRents(),
+    const [fetchedCars, fetchedModels] = await Promise.all([
       fetchCars(),
       fetchModels(),
     ]);
-
-    // Update models and cars with rent info
-    fetchedCars.forEach((car) => {
-      car.modelIds = fetchedModels.reduce((accumulator, model) => {
-        if (model.carId === car.carId) {
-          accumulator.push(model.modelId);
-        }
-        return accumulator;
-      }, []);
-      car.rents = fetchedRents.filter((rent) =>
-        car.modelIds.includes(rent.modelId)
-      ).length;
-    });
-    fetchedModels.forEach(
-      (model) =>
-        (model.rents = fetchedRents.filter(
-          (rent) => rent.modelId === model.modelId
-        ).length)
-    );
 
     setCars(fetchedCars);
     setModels(fetchedModels);
@@ -111,10 +76,8 @@ const ManageCars = () => {
   const handleCarIdUpdate = (carId) => {
     const selectedCar = cars.find((car) => car.carId === carId);
     if (selectedCar) {
-      const selectedModelIds = selectedCar.modelIds;
-      const selectedModels = models.filter((model) =>
-        selectedModelIds.includes(model.modelId)
-      );
+      const selectedModels = models.filter((model) => model.carId === carId);
+
       setSelectedCarId(selectedCar.carId);
       setCarModels(selectedModels);
       setModelCaption(`Showing Models for ${selectedCar.brand}`);
