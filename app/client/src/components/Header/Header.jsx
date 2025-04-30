@@ -85,9 +85,6 @@ const Header = () => {
                 <button onClick={() => navigate("/manage-cars")}>
                   Manage Cars
                 </button>
-                <button onClick={() => navigate("/my-reviews")}>
-                  My Reviews
-                </button>
               </div>
             )}
           </section>
