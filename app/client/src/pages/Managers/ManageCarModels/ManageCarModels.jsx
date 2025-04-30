@@ -76,12 +76,12 @@ const ManageCarModels = () => {
     }
   };
 
-  // Updates car list when cars updated
+  // Updates model list when models updated
   useEffect(() => {
     if (selectedCarId) {
       handleCarIdUpdate(selectedCarId);
     }
-  }, [cars]);
+  }, [models]);
 
   const handleAddCar = async (event) => {
     event.preventDefault();
