@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { getDriverAddress, updateDriverAddress } from '../../../services/apiService';
+import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
 
 const ManageAddress = () => {
-  const [driverName, setDriverName] = useState('');
+  const { identity } = useGetIdentity();
+  const driverName = identity?.name;
   const [address, setAddress] = useState({ road: '', number: '', city: '' });
 
-  const fetchAddress = async () => {
-    if (driverName) {
-      const data = await getDriverAddress(driverName);
-      setAddress(data);
-    }
-  };
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (driverName) {
+        const data = await getDriverAddress(driverName);
+        setAddress(data || { road: '', number: '', city: '' });
+      }
+    };
+    fetchAddress();
+  }, [driverName]);
 
-  const handleUpdate = async () => {
-    if (driverName && address.road && address.number && address.city) {
+  const handleUpdate = async() => {
+    if (address.road && address.number && address.city) {
       await updateDriverAddress(driverName, address.road, address.number, address.city);
       alert('Address updated successfully!');
     } else {
@@ -24,13 +29,6 @@ const ManageAddress = () => {
   return (
     <div>
       <h2>Manage Address</h2>
-      <input
-        type="text"
-        placeholder="Enter your name"
-        value={driverName}
-        onChange={(e) => setDriverName(e.target.value)}
-      />
-      <button onClick={fetchAddress}>Fetch Address</button>
       <div>
         <input
           type="text"

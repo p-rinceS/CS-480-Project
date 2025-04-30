@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { getModels, assignDriverModel } from '../../../services/apiService';
+import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
 
 const ManageCars = () => {
+  const { identity } = useGetIdentity();
+  const driverName = identity?.name;
   const [models, setModels] = useState([]);
   const [selectedModel, setSelectedModel] = useState(null);
-  const [driverName, setDriverName] = useState('');
 
   useEffect(() => {
     const fetchModels = async () => {
       const data = await getModels();
-      setModels(data);
+      setModels(data || []);
     };
     fetchModels();
   }, []);
@@ -19,19 +21,13 @@ const ManageCars = () => {
       await assignDriverModel(driverName, selectedModel.model_id, selectedModel.car_id);
       alert('Model assigned successfully!');
     } else {
-      alert('Please select a model and enter your name.');
+      alert('Please select a model.');
     }
   };
 
   return (
     <div>
       <h2>Manage Car Models</h2>
-      <input
-        type="text"
-        placeholder="Enter your name"
-        value={driverName}
-        onChange={(e) => setDriverName(e.target.value)}
-      />
       <ul>
         {models.map((model) => (
           <li key={`${model.model_id}-${model.car_id}`}>
