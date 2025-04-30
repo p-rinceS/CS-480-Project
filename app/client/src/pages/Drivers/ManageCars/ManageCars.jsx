@@ -10,8 +10,18 @@ const ManageCars = () => {
 
   useEffect(() => {
     const fetchModels = async () => {
-      const data = await getModels();
-      setModels(data || []);
+      const modelResponse = await getModels();
+      const mappedModels = modelResponse?.map(
+        ([modelId, color, year, transmission, carId, rents]) => ({
+          model_id: modelId,
+          color,
+          year,
+          transmission,
+          car_id: carId,
+          rents,
+        })
+      );
+      setModels(mappedModels || []);
     };
     fetchModels();
   }, []);
@@ -31,7 +41,7 @@ const ManageCars = () => {
       <ul>
         {models.map((model) => (
           <li key={`${model.model_id}-${model.car_id}`}>
-            {model.brand} - {model.color} - {model.year} - {model.transmission}
+            {model.color} - {model.year} - {model.transmission}
             <button onClick={() => setSelectedModel(model)}>Select</button>
           </li>
         ))}
