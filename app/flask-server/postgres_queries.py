@@ -523,3 +523,51 @@ def write_review(connection, client_email, driver_name, rating, message):
         connection.rollback()
     finally:
         cursor.close()
+
+def get_all_models(conn):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT model_id, car_id, color, year, transmission 
+        FROM taxischema.model;
+    """)
+    models = cursor.fetchall()
+    cursor.close()
+    return [{"model_id": m[0], "car_id": m[1], "color": m[2], "year": m[3], "transmission": m[4]} for m in models]
+
+def assign_driver_model(conn, driver_name, model_id, car_id):
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO taxischema.driver_model (driver_name, model_id, car_id)
+        VALUES (%s, %s, %s)
+        ON CONFLICT DO NOTHING;
+    """, (driver_name, model_id, car_id))
+    conn.commit()
+    cursor.close()
+
+def get_driver_address(conn, driver_name):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT road, number, city 
+        FROM taxischema.driver
+        WHERE name = %s;
+    """, (driver_name,))
+    address = cursor.fetchone()
+    cursor.close()
+    return {"road": address[0], "number": address[1], "city": address[2]} if address else {}
+
+def update_driver_address(conn, driver_name, road, number, city):
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO taxischema.address (road, number, city)
+        VALUES (%s, %s, %s)
+        ON CONFLICT DO NOTHING;
+    """, (road, number, city))
+    
+    cursor.execute("""
+        UPDATE taxischema.driver
+        SET home_road = %s, home_number = %s, home_city = %s
+        WHERE name = %s;
+    """, (road, number, city, driver_name))
+    
+    conn.commit()
+    cursor.close()

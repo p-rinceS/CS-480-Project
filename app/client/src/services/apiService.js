@@ -311,16 +311,39 @@ export const writeReview = async (client_email, driver, rating, message) => {
     }
 }
 
-export const addDriverModel = async (driverName, model_id, car_id) => {
+export const assignDriverModel = async (driverName, modelId, carId) => {
   try {
     const response = await api.post("driver/models", {
-      driver_name: driverName,
-      model_id,
-      car_id,
+      driverName,
+      modelId,
+      carId,
     });
     return response.data;
   } catch (error) {
     console.log("Error: ", error);
-    throw error;
+  }
+};
+
+
+export const getDriverAddress = async (driverName) => {
+  try {
+    const response = await api.get(`driver/address/${driverName}`);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const updateDriverAddress = async (driverName, road, number, city) => {
+  try {
+    const response = await api.put("driver/address", {
+      driverName,
+      road,
+      number,
+      city,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
   }
 };

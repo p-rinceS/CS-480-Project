@@ -1,59 +1,48 @@
-import { useEffect, useState } from "react";
-import "./ManageDrivers.css";
-import { getModels, declareModelForDriver } from "../../../services/apiService";
+import React, { useEffect, useState } from 'react';
+import { getModels, assignDriverModel } from '../../api/apiService';
 
-/**
- * Drivers should be able to:
- * - See a list of all car models
- * - Declare what car models they can drive
- */
-
-const ManageDrivers = () => {
+const ManageCars = () => {
   const [models, setModels] = useState([]);
-  const [declaredModels, addDriverModel] = useState(new Set());
-
-  // Fetch car models and populate state
-  const fetchModels = async () => {
-    const modelResponse = await getModels();
-    const uniqueModels = modelResponse.reduce((accumulator, [modelId, color, year, transmission]) => {
-      if (!accumulator.find((model) => model.modelId === modelId)) {
-        accumulator.push({ modelId, color, year, transmission });
-      }
-      return accumulator;
-    }, []);
-    setModels(uniqueModels);
-  };
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [driverName, setDriverName] = useState('');
 
   useEffect(() => {
+    const fetchModels = async () => {
+      const data = await getModels();
+      setModels(data);
+    };
     fetchModels();
   }, []);
 
-  // Handle driver declaring a model
-  const handleDeclareModel = async (modelId) => {
-    if (declaredModels.has(modelId)) return; // already declared
-    await declareModelForDriver(modelId); // API call
-    addDriverModel((prev) => new Set(prev).add(modelId));
+  const handleAssign = async () => {
+    if (selectedModel && driverName) {
+      await assignDriverModel(driverName, selectedModel.model_id, selectedModel.car_id);
+      alert('Model assigned successfully!');
+    } else {
+      alert('Please select a model and enter your name.');
+    }
   };
 
   return (
-    <div id="manage-drivers-page">
-      <div className="list">
-        <h2>Available Car Models</h2>
-        <h4>Click on a model to declare you can drive it</h4>
-        <ul>
-          {models.map(({ modelId, color, year, transmission }) => (
-            <li
-              key={modelId}
-              className={declaredModels.has(modelId) ? "declared" : ""}
-              onClick={() => handleDeclareModel(modelId)}
-            >
-              {transmission} {color} {year} — {declaredModels.has(modelId) ? "Declared" : "Click to declare"}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div>
+      <h2>Manage Car Models</h2>
+      <input
+        type="text"
+        placeholder="Enter your name"
+        value={driverName}
+        onChange={(e) => setDriverName(e.target.value)}
+      />
+      <ul>
+        {models.map((model) => (
+          <li key={`${model.model_id}-${model.car_id}`}>
+            {model.brand} - {model.color} - {model.year} - {model.transmission}
+            <button onClick={() => setSelectedModel(model)}>Select</button>
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleAssign}>Assign Selected Model</button>
     </div>
   );
 };
 
-export default ManageDrivers;
+export default ManageCars;

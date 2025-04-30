@@ -387,25 +387,54 @@ class RentResource(Resource):
       return ('Error getting data', 400)
 
 @api.route('/api/driver/models')
-class DriverModelResource(Resource):
-  def post(self):
-    connection = db_connection()
-    if connection:
-      try:
-        data = request.get_json()
-        driver_name = data.get('driver_name')
-        model_id = data.get('model_id')
-        car_id = data.get('car_id')
+class DriverModels(Resource):
+    def get(self):
+        conn = db_connection()
+        if conn:
+            try:
+                return jsonify(getModels(conn))
+            finally:
+                conn.close()
+    
+    def post(self):
+        conn = db_connection()
+        if conn:
+            try:
+                data = request.get_json()
+                driver_name = data["driverName"]
+                model_id = data["modelId"]
+                car_id = data["carId"]
+                assign_driver_model(conn, driver_name, model_id, car_id)
+                return {"message": "Driver model assigned successfully"}
+            finally:
+                conn.close()
 
-        add_driver_model(connection, driver_name, model_id, car_id)
-        return {"message": "Driver model declared successfully"}
-      except Exception as e:
-        print("Error while declaring driver model:", e)
-        return {"message": "Error while declaring driver model"}, 500
-      finally:
-        print("Closing connection")
-        connection.close()
-    return {"message": "No database connection"}, 500
+@api.route('/api/driver/address/<string:driver_name>')
+class DriverAddress(Resource):
+    def get(self, driver_name):
+        conn = db_connection()
+        if conn:
+            try:
+                address = get_driver_address(conn, driver_name)
+                return jsonify(address)
+            finally:
+                conn.close()
+
+@api.route('/api/driver/address')
+class UpdateDriverAddress(Resource):
+    def put(self):
+        conn = db_connection()
+        if conn:
+            try:
+                data = request.get_json()
+                driver_name = data["driverName"]
+                road = data["road"]
+                number = data["number"]
+                city = data["city"]
+                update_driver_address(conn, driver_name, road, number, city)
+                return {"message": "Driver address updated successfully"}
+            finally:
+                conn.close()
 
 if __name__ == "__main__":
   initialize_db()
