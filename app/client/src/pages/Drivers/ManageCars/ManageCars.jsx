@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getModels, assignDriverModel } from '../../../services/apiService';
-import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
+import useGetIdentity from "../../../utils/hooks/useGetIdentity.jsx";
 
 const ManageCars = () => {
   const { identity } = useGetIdentity();

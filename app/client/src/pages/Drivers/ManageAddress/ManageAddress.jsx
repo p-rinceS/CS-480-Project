@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getDriverAddress, updateDriverAddress } from '../../../services/apiService';
-import useGetIdentity from "../../../../utils/hooks/useGetIdentity.jsx";
+import useGetIdentity from "../../../utils/hooks/useGetIdentity.jsx";
 
 const ManageAddress = () => {
   const { identity } = useGetIdentity();
