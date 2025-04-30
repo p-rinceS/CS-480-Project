@@ -207,25 +207,28 @@ def add_address(connection, road, number, city):
         cursor.close()
 
 
-def add_client(connection, name, email, home_road, home_number, home_city):
+def insert_client(connection, name, email, home_road, home_number, home_city):
     try:
         cursor = connection.cursor()
-        '''
-         name TEXT NOT NULL,
-         email TEXT NOT NULL,
-         home_road TEXT NOT NULL,
-         home_number INTEGER NOT NULL,
-         home_city TEXT NOT NULL,
-         CONSTRAINT fk_client_address FOREIGN KEY (home_road, home_number, home_city) REFERENCES taxischema.address(road, number, city) ON UPDATE CASCADE ON DELETE CASCADE,
-         PRIMARY KEY (email)
-        '''
-        query = "INSERT INTO taxischema.client (name, email, home_road, home_number, home_city) VALUES (%s, %s, %s, %s, %s);"
-        cursor.execute(query, (name, email, home_road, home_number, home_city))
+        query1 ='''
+            INSERT INTO taxischema.address (road, number, city)
+            SELECT %s, %s, %s
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM taxischema.address
+                WHERE road = %s AND number = %s AND city = %s
+            )'''
+        query2 = '''
+            INSERT INTO taxischema.client (name, email, home_road, home_number, home_city)
+            VALUES (%s, %s, %s, %s, %s);'''
+        cursor.execute(query1, (home_road, home_number, home_city, home_road, home_number, home_city))
+        cursor.execute(query2, (name, email, home_road, home_number, home_city))
         connection.commit()
-        print("Client added successfully")
+        results = cursor.rowcount > 0
+        return results
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
-        connection.rollback()
+        return None
     finally:
         cursor.close()
 
@@ -521,6 +524,22 @@ def write_review(connection, client_email, driver_name, rating, message):
     except psycopg2.Error as e:
         print(f"Error executing query: {e}")
         connection.rollback()
+    finally:
+        cursor.close()
+
+def insert_manager(connection, name, email, ssn):
+    try:
+        cursor = connection.cursor()
+        query = '''
+            INSERT INTO taxischema.manager (ssn, name, email)
+            VALUES (%s, %s, %s);'''
+        cursor.execute(query, (ssn, name, email))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
     finally:
         cursor.close()
 

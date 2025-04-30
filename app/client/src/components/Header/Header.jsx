@@ -11,7 +11,7 @@ export const getUserIdentifingName = () => {
   } else if (role === "driver") {
     return identity.name + " (" + role + ")";
   } else if (role === "manager") {
-    return identity.ssn + " (" + role + ")";
+    return identity.name + " (" + role + ")";
   } else if (role === "admin") {
     return "Admin";
   }
@@ -48,7 +48,7 @@ const Header = () => {
             )}
             {getUserRole() === "manager" && (
               <div className={"header-tabs"}>
-                <button onClick={() => navigate("/manage-cars")}>
+                <button onClick={() => navigate("/manage-car-models")}>
                   Manage Cars
                 </button>
                 <button onClick={() => navigate("/manage-drivers")}>

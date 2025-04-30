@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../Manager.css";
-import "./ManageCars.css";
+import "./ManageCarModels.css";
 import {
   addCar,
   addModel,
@@ -11,7 +11,7 @@ import {
 } from "../../../services/apiService";
 import Popup from "../../../components/Popup/Popup";
 
-const ManageCars = () => {
+const ManageCarModels = () => {
   const [models, setModels] = useState([]);
   const [cars, setCars] = useState([]);
   const [carModels, setCarModels] = useState([]);
@@ -243,4 +243,4 @@ const ManageCars = () => {
   );
 };
 
-export default ManageCars;
+export default ManageCarModels;

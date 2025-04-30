@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getDriverAddress, updateDriverAddress } from '../../api/apiService';
+import { getDriverAddress, updateDriverAddress } from '../../../services/apiService';
 
 const ManageAddress = () => {
   const [driverName, setDriverName] = useState('');

@@ -15,16 +15,17 @@ import Home from "./pages/Home/Home.jsx";
 import Test from "./pages/Test/Test.jsx";
 import Clients from "./pages/Clients/Clients.jsx";
 import Login from "./pages/Login/Login.jsx";
+import Registration from "./pages/Registration/Registration.jsx";
 import getCookie from "./utils/getCookie.js";
 import PaymentInfo from "./pages/Clients/client-pages/PaymentInfo/PaymentInfo.jsx";
-import ManageCars from "./pages/Managers/ManageCars/ManageCars.jsx";
+import ManageCarModels from "./pages/Managers/ManageCarModels/ManageCarModels.jsx";
 import ManageClients from "./pages/Managers/ManageClients/ManageClients.jsx";
 import ManageDrivers from "./pages/Managers/ManageDrivers/ManageDrivers.jsx";
 import BookRent from "./pages/Clients/client-pages/ViewAvailableCars/BookRent.jsx";
 import RentalHistory from "./pages/Clients/client-pages/RentalHistory/RentalHistory.jsx";
 import WriteReviews from "./pages/Clients/client-pages/WriteReviews/WriteReviews.jsx";
-import ManageCars from './pages/Drivers/ManageCars.jsx';
-import ManageAddress from './pages/Drivers/ManageAddress.jsx';
+import ManageCars from './pages/Drivers/ManageCars/ManageCars.jsx';
+import ManageAddress from './pages/Drivers/ManageAddress/ManageAddress.jsx';
 
 const isAuthenticated = () => {
   return !!getCookie("role"); // Check if the 'role' cookie exists
@@ -83,10 +84,10 @@ createRoot(document.getElementById("root")).render(
           }
         />
         <Route
-          path="/manage-cars"
+          path="/manage-car-models"
           element={
             <PrivateRoute>
-              <ManageCars />
+              <ManageCarModels />
             </PrivateRoute>
           }
         />
@@ -130,6 +131,7 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+        <Route path={'/write-a-review'} element={<PrivateRoute><WriteReviews/></PrivateRoute>}></Route>
         <Route
           path={"/manage-cars"}
           element={
@@ -143,7 +145,7 @@ createRoot(document.getElementById("root")).render(
           }
         />
         <Route path="/login" element={<Login />} />
-          <Route path={'/write-a-review'} element={<WriteReviews/>}></Route>
+        <Route path="/registration" element={<Registration />} />
       </Route>
     </Routes>
   </Router>

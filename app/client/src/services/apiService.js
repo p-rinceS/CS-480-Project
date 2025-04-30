@@ -6,6 +6,20 @@ const api = axios.create({
   timeout: 10000,
 });
 
+export const addManager = async (name, email, ssn) => {
+  try {
+    const response = await api.post("managers", {
+      name: name,
+      email: email,
+      ssn: ssn,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
 export const getModels = async () => {
   try {
     const response = await api.get("models");
@@ -79,7 +93,6 @@ export const getDrivers = async () => {
 };
 
 export const addDriver = async (name, homeRoad, homeNumber, homeCity) => {
-  console.log("Adding Driver " + name);
   try {
     const response = await api.post("drivers", {
       name: name,
@@ -121,6 +134,22 @@ export const getCityClients = async (city1, city2) => {
     return response.data;
   } catch (error) {
     console.log("Error: ", error);
+  }
+};
+
+export const addClient = async (name, email, homeRoad, homeNumber, homeCity) => {
+  try {
+    const response = await api.post("clients", {
+      name: name,
+      email: email,
+      homeRoad: homeRoad,
+      homeNumber: homeNumber,
+      homeCity: homeCity,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
   }
 };
 

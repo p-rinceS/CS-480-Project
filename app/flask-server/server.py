@@ -66,7 +66,8 @@ class ExampleResource(Resource):
         home_road = data.get('home_road')
         home_number = data.get('home_number')
         home_city = data.get('home_city')
-        add_client(connection, name, email, home_road, home_number, home_city)
+        insert_client(connection, name, email, home_road, home_number, home_city)
+        insert_client(connection, name, email, home_road, home_number, home_city)
       finally:
         print("Closing connection")
         connection.close()
@@ -310,7 +311,6 @@ class DriverResource(Resource):
   def get(self):
     connection = db_connection()
     try:
-
       result = select_all_drivers_and_rents_rating(connection)
       # Convert datetimes to isoformat so they can be serialized
       processed_result = []
@@ -332,7 +332,6 @@ class DriverResource(Resource):
       home_road = data.get('homeRoad')
       home_number = data.get('homeNumber')
       home_city = data.get('homeCity')
-      print(name)
       result = insert_driver(connection, name, home_road, home_number, home_city)
       return (result, 200)
     except:
@@ -365,6 +364,21 @@ class ClientResource(Resource):
         return (result, 200)
     except:
       return ('Error getting data', 400)
+    
+  def post(self):
+    connection = db_connection()
+    if connection:
+      try:
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+        home_road = data.get('homeRoad')
+        home_number = data.get('homeNumber')
+        home_city = data.get('homeCity')
+        result = insert_client(connection, name, email, home_road, home_number, home_city)
+        return (result, 200)
+      except:
+        return ('Error getting data', 400)
 
     
 @api.route('/api/rents')
@@ -435,6 +449,20 @@ class UpdateDriverAddress(Resource):
                 return {"message": "Driver address updated successfully"}
             finally:
                 conn.close()
+  
+@api.route('/api/managers')
+class ManagerResource(Resource):
+  def post(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      name = data.get('name')
+      email = data.get('email')
+      ssn = data.get('ssn')
+      result = insert_manager(connection, name, email, ssn)
+      return (result, 200)
+    except:
+      return ('Error posting data', 400)
 
 if __name__ == "__main__":
   initialize_db()

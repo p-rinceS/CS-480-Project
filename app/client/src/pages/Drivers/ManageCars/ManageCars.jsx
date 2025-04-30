@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getModels, assignDriverModel } from '../../api/apiService';
+import { getModels, assignDriverModel } from '../../../services/apiService';
 
 const ManageCars = () => {
   const [models, setModels] = useState([]);
