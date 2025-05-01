@@ -592,3 +592,66 @@ def update_driver_address(conn, driver_name, road, number, city):
     
     conn.commit()
     cursor.close()
+
+def get_assigned_models(conn, driver_name):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT m.model_id, m.color, m.year, m.transmission, c.car_id, c.brand
+        FROM taxischema.driver_model dm
+        JOIN taxischema.model m ON dm.model_id = m.model_id AND dm.car_id = m.car_id
+        JOIN taxischema.car c ON m.car_id = c.car_id
+        WHERE dm.driver_name = %s;
+    """, (driver_name,))
+    results = cursor.fetchall()
+    cursor.close()
+    return [
+        {
+            "model_id": row[0],
+            "color": row[1],
+            "year": row[2],
+            "transmission": row[3],
+            "car_id": row[4],
+            "brand": row[5]
+        }
+        for row in results
+    ]
+
+
+def get_available_models(conn, driver_name):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT m.model_id, m.color, m.year, m.transmission, c.car_id, c.brand
+        FROM taxischema.model m
+        JOIN taxischema.car c ON m.car_id = c.car_id
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM taxischema.driver_model dm
+            WHERE dm.driver_name = %s
+              AND dm.model_id = m.model_id
+              AND dm.car_id = m.car_id
+        );
+    """, (driver_name,))
+    results = cursor.fetchall()
+    cursor.close()
+    return [
+        {
+            "model_id": row[0],
+            "color": row[1],
+            "year": row[2],
+            "transmission": row[3],
+            "car_id": row[4],
+            "brand": row[5]
+        }
+        for row in results
+    ]
+
+
+def assign_model_to_driver(conn, driver_name, model_id, car_id):
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO taxischema.driver_model (driver_name, model_id, car_id)
+        VALUES (%s, %s, %s)
+        ON CONFLICT DO NOTHING;
+    """, (driver_name, model_id, car_id))
+    conn.commit()
+    cursor.close()

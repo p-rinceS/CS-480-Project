@@ -340,20 +340,6 @@ export const writeReview = async (client_email, driver, rating, message) => {
     }
 }
 
-export const assignDriverModel = async (driverName, modelId, carId) => {
-  try {
-    const response = await api.post("driver/models", {
-      driverName,
-      modelId,
-      carId,
-    });
-    return response.data;
-  } catch (error) {
-    console.log("Error: ", error);
-  }
-};
-
-
 export const getDriverAddress = async (driverName) => {
   try {
     const response = await api.get(`/driver/address/${driverName}`);
@@ -375,5 +361,37 @@ export const updateDriverAddress = async (driverName, road, number, city) => {
     return response.data;
   } catch (error) {
     console.log("Error: ", error);
+  }
+};
+
+export const getAssignedModels = async (driverName) => {
+  try {
+    const response = await api.get(`/driver/models/assigned/${driverName}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching assigned models:', error);
+    return [];
+  }
+};
+
+export const getAvailableModels = async (driverName) => {
+  try {
+    const response = await api.get(`/driver/models/available/${driverName}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching available models:', error);
+    return [];
+  }
+};
+
+export const assignDriverModel = async (driverName, modelId, carId) => {
+  try {
+    await api.post(`/driver/models/assign`, {
+      driver_name: driverName,
+      model_id: modelId,
+      car_id: carId
+    });
+  } catch (error) {
+    console.error('Error assigning model to driver:', error);
   }
 };

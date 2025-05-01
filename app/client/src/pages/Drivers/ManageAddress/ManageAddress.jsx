@@ -38,7 +38,7 @@ const ManageAddress = () => {
 
   return (
     <div>
-      <h2>Manage Address</h2>
+      <h2>Address Information</h2>
 
       <div style={{ marginBottom: '1rem' }}>
         <strong>Current Address:</strong>{' '}

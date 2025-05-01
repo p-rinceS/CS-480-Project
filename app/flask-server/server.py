@@ -464,6 +464,37 @@ class ManagerResource(Resource):
     except:
       return ('Error posting data', 400)
 
+@api.route('/api/driver/models/assigned/<string:driver_name>')
+class AssignedModels(Resource):
+    def get(self, driver_name):
+        conn = db_connection()
+        try:
+            data = get_assigned_models(conn, driver_name)
+            return jsonify(data)
+        finally:
+            conn.close()
+
+@api.route('/api/driver/models/available/<string:driver_name>')
+class AvailableModels(Resource):
+    def get(self, driver_name):
+        conn = db_connection()
+        try:
+            data = get_available_models(conn, driver_name)
+            return jsonify(data)
+        finally:
+            conn.close()
+
+@api.route('/api/driver/models/assign', methods=['POST'])
+class AssignModel(Resource):
+    def post(self):
+        conn = db_connection()
+        try:
+            data = request.get_json()
+            assign_model_to_driver(conn, data['driver_name'], data['model_id'], data['car_id'])
+            return {'message': 'Model assigned'}
+        finally:
+            conn.close()
+
 if __name__ == "__main__":
   initialize_db()
   app.run(debug=True)
