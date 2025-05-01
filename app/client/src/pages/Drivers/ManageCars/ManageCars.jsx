@@ -27,14 +27,6 @@ const ManageCars = () => {
     loadModels();
   }, [driverName]);
 
-  const handleSelect = (model) => {
-    if (!selectedModels.find(
-      (m) => m.model_id === model.model_id && m.car_id === model.car_id
-    )) {
-      setSelectedModels([...selectedModels, model]);
-    }
-  };
-
   const handleAssign = async () => {
     if (selectedModels.length === 0) {
       alert('Please select at least one model.');
