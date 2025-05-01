@@ -495,6 +495,17 @@ class AssignModel(Resource):
         finally:
             conn.close()
 
+@api.route('/api/driver/models/remove', methods=['POST'])
+class RemoveModel(Resource):
+    def post(self):
+        conn = db_connection()
+        try:
+            data = request.get_json()
+            remove_model_from_driver(conn, data['driver_name'], data['model_id'], data['car_id'])
+            return {'message': 'Model removed'}
+        finally:
+            conn.close()
+
 if __name__ == "__main__":
   initialize_db()
   app.run(debug=True)

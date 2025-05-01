@@ -655,3 +655,12 @@ def assign_model_to_driver(conn, driver_name, model_id, car_id):
     """, (driver_name, model_id, car_id))
     conn.commit()
     cursor.close()
+
+def remove_model_from_driver(conn, driver_name, model_id, car_id):
+    cursor = conn.cursor()
+    cursor.execute("""
+        DELETE FROM taxischema.driver_model
+        WHERE driver_name = %s AND model_id = %s AND car_id = %s;
+    """, (driver_name, model_id, car_id))
+    conn.commit()
+    cursor.close()

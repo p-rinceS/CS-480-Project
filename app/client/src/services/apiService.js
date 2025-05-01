@@ -395,3 +395,15 @@ export const assignDriverModel = async (driverName, modelId, carId) => {
     console.error('Error assigning model to driver:', error);
   }
 };
+
+export const removeDriverModel = async (driverName, modelId, carId) => {
+  try {
+    await api.post(`/driver/models/remove`, {
+      driver_name: driverName,
+      model_id: modelId,
+      car_id: carId
+    });
+  } catch (error) {
+    console.error('Error removing model from driver:', error);
+  }
+};

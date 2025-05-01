@@ -31,6 +31,7 @@ const ManageAddress = () => {
     if (address.road && address.number && address.city) {
       await updateDriverAddress(driverName, address.road, address.number, address.city);
       alert('Address updated successfully!');
+      window.location.reload();
     } else {
       alert('Please fill in all fields.');
     }
