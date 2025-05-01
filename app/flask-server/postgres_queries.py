@@ -566,9 +566,11 @@ def assign_driver_model(conn, driver_name, model_id, car_id):
 def get_driver_address(conn, driver_name):
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT road, number, city 
-        FROM taxischema.driver
-        WHERE name = %s;
+        SELECT a.road, a.number, a.city
+        FROM taxischema.driver d
+        JOIN taxischema.address a
+          ON d.home_road = a.road AND d.home_number = a.number AND d.home_city = a.city
+        WHERE d.name = %s;
     """, (driver_name,))
     address = cursor.fetchone()
     cursor.close()

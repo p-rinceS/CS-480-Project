@@ -5,19 +5,29 @@ import useGetIdentity from "../../../utils/hooks/useGetIdentity.jsx";
 const ManageAddress = () => {
   const { identity } = useGetIdentity();
   const driverName = identity?.name;
+
   const [address, setAddress] = useState({ road: '', number: '', city: '' });
+  const [currentAddress, setCurrentAddress] = useState(null);
 
   useEffect(() => {
     const fetchAddress = async () => {
       if (driverName) {
-        const data = await getDriverAddress(driverName);
-        setAddress(data || { road: '', number: '', city: '' });
+        const response = await getDriverAddress(driverName);
+        if (response && response.road && response.number && response.city) {
+          setCurrentAddress({
+            road: response.road,
+            number: response.number,
+            city: response.city
+          });
+        } else {
+          setCurrentAddress(null);
+        }
       }
     };
     fetchAddress();
   }, [driverName]);
 
-  const handleUpdate = async() => {
+  const handleUpdate = async () => {
     if (address.road && address.number && address.city) {
       await updateDriverAddress(driverName, address.road, address.number, address.city);
       alert('Address updated successfully!');
@@ -29,6 +39,14 @@ const ManageAddress = () => {
   return (
     <div>
       <h2>Manage Address</h2>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <strong>Current Address:</strong>{' '}
+        {currentAddress
+          ? `${currentAddress.road} ${currentAddress.number}, ${currentAddress.city}`
+          : 'N/A'}
+      </div>
+
       <div>
         <input
           type="text"
@@ -49,6 +67,7 @@ const ManageAddress = () => {
           onChange={(e) => setAddress({ ...address, city: e.target.value })}
         />
       </div>
+
       <button onClick={handleUpdate}>Update Address</button>
     </div>
   );

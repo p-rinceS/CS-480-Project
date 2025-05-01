@@ -356,10 +356,11 @@ export const assignDriverModel = async (driverName, modelId, carId) => {
 
 export const getDriverAddress = async (driverName) => {
   try {
-    const response = await api.get(`driver/address/${driverName}`);
+    const response = await api.get(`/driver/address/${driverName}`);
     return response.data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.log("Error fetching driver address: ", error);
+    return null;
   }
 };
 
