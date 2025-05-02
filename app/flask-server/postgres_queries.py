@@ -245,7 +245,7 @@ def delete_address(connection, road, number, city):
     finally:
         cursor.close()
 
-def insert_client(connection, name, email, addresses):
+def insert_client(connection, name, email, addresses, cards):
     try:
         cursor = connection.cursor()
         query1 = '''
@@ -270,6 +270,13 @@ def insert_client(connection, name, email, addresses):
                 VALUES (%s, %s, %s, %s)'''
             cursor.execute(query2, (home_road, home_number, home_city, home_road, home_number, home_city))
             cursor.execute(query3, (email, home_road, home_number, home_city))
+        
+        for card in cards:
+            card_number = address.get('cardNumber')
+            billing_road = address.get('billingRoad')
+            billing_number = address.get('billingNumber')
+            billing_city = address.get('billingCity')
+            add_client_credit_card(connection, email, card_number, billing_road, billing_number, billing_city)
         connection.commit()
         results = cursor.rowcount > 0
         return results

@@ -14,6 +14,9 @@ const Registration = () => {
   const [addresses, setAddresses] = useState([
     { road: "", number: "", city: "" },
   ]);
+  const [payments, setPayments] = useState([
+    { cardNumber: "", billingRoad: "", billingNumber: "", billingCity: "" },
+  ]);
 
   const addAddress = () => {
     setAddresses((prev) => [...prev, { road: "", number: "", city: "" }]);
@@ -22,6 +25,19 @@ const Registration = () => {
   const removeAddress = (index) => {
     if (addresses.length > 1) {
       setAddresses((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const addPayment = () => {
+    setPayments([
+      ...payments,
+      { cardNumber: "", billingRoad: "", billingNumber: "", billingCity: "" },
+    ]);
+  };
+
+  const removePayment = (index) => {
+    if (payments.length > 1) {
+      setPayments(payments.filter((_, i) => i !== index));
     }
   };
 
@@ -46,7 +62,9 @@ const Registration = () => {
       const clientName = formData.get("client-name");
       const clientEmail = formData.get("client-email");
       const addresses = [];
+      const cards = [];
       let addressIndex = 0;
+      let cardIndex = 0;
 
       // Add address to addresses for all client addresses
       while (formData.has(`client-road-${addressIndex}`)) {
@@ -61,10 +79,27 @@ const Registration = () => {
 
         addressIndex++;
       }
+
+      // Add card to cards for all client cards
+      while (formData.has(`client-road-${addressIndex}`)) {
+        const cardNumber = formData.get(`card-number-${cardIndex}`);
+        const billingRoad = formData.get(`billing-road-${cardIndex}`);
+        const billingNumber = formData.get(`billing-number-${cardIndex}`);
+        const billingCity = formData.get(`billing-city-${cardIndex}`);
+        cards.push({
+          cardNumber,
+          billingRoad,
+          billingNumber,
+          billingCity,
+        });
+
+        cardIndex++;
+      }
+
       try {
         const exists = await checkUserExists("client", clientEmail);
         if (!exists.exists) {
-          await addClient(clientName, clientEmail, addresses);
+          await addClient(clientName, clientEmail, addresses, cards);
           document.cookie = `role=${role}; path=/;`;
           document.cookie = `identity=${JSON.stringify({
             name: clientName,
@@ -195,6 +230,69 @@ const Registration = () => {
 
                 <button type="button" onClick={addAddress}>
                   Add Address
+                </button>
+                {payments.map((_, index) => (
+                  <div key={index} className="payment-group">
+                    <div>
+                      <label htmlFor={`card-number-${index}`}>
+                        Card Number:
+                      </label>
+                      <input
+                        type="text"
+                        pattern="\d{16}"
+                        inputMode="numeric"
+                        id={`card-number-${index}`}
+                        name={`card-number-${index}`}
+                        required
+                        maxLength={16}
+                        minLength={16}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`billing-number-${index}`}>
+                        Billing Number:
+                      </label>
+                      <input
+                        type="number"
+                        id={`billing-number-${index}`}
+                        name={`billing-number-${index}`}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`billing-road-${index}`}>
+                        Billing Road:
+                      </label>
+                      <input
+                        type="text"
+                        id={`billing-road-${index}`}
+                        name={`billing-road-${index}`}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`billing-city-${index}`}>
+                        Billing City:
+                      </label>
+                      <input
+                        type="text"
+                        id={`billing-city-${index}`}
+                        name={`billing-city-${index}`}
+                        required
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removePayment(index)}
+                      disabled={payments.length === 1}
+                    >
+                      Remove Payment
+                    </button>
+                    <hr />
+                  </div>
+                ))}
+                <button type="button" onClick={addPayment}>
+                  Add Payment Method
                 </button>
               </div>
             )}

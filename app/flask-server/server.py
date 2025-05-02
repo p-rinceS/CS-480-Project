@@ -374,7 +374,8 @@ class ClientResource(Resource):
         name = data.get('name')
         email = data.get('email')
         addresses = data.get('addresses')
-        result = insert_client(connection, name, email, addresses)
+        cards = data.get('cards')
+        result = insert_client(connection, name, email, addresses, cards)
         return (result, 200)
       except:
         return ('Error getting data', 400)
