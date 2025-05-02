@@ -375,6 +375,7 @@ class ClientResource(Resource):
         email = data.get('email')
         addresses = data.get('addresses')
         cards = data.get('cards')
+        print(cards)
         result = insert_client(connection, name, email, addresses, cards)
         return (result, 200)
       except:

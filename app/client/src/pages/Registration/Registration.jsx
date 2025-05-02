@@ -81,7 +81,7 @@ const Registration = () => {
       }
 
       // Add card to cards for all client cards
-      while (formData.has(`client-road-${addressIndex}`)) {
+      while (formData.has(`card-number-${cardIndex}`)) {
         const cardNumber = formData.get(`card-number-${cardIndex}`);
         const billingRoad = formData.get(`billing-road-${cardIndex}`);
         const billingNumber = formData.get(`billing-number-${cardIndex}`);
