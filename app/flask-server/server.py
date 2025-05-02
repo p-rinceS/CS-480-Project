@@ -9,11 +9,10 @@ from decimal import Decimal
 from postgres_server import db_connection, initialize_db
 from postgres_queries import *
 
-# from postgres_queries import some queries functions we made
+# Serve from build files
 app = Flask(__name__, static_folder='../client/dist', template_folder='../client/dist')
 # app = Flask(__name__)
 CORS(app)
-api = Api(app, doc='/docs')
 
 
 # serves react front end files from build directory
@@ -24,6 +23,8 @@ def serve_react(path):
     return send_from_directory(app.static_folder, path)
   else:
     return send_from_directory(app.static_folder, 'index.html')
+
+api = Api(app, doc='/docs')
 
 # example for /api/test route
 @api.route('/api/test/get_clients')
@@ -380,7 +381,34 @@ class ClientResource(Resource):
       except:
         return ('Error getting data', 400)
 
+@api.route('/api/addresses')
+class AddressResource(Resource):
+  def get(self):
+    connection = db_connection()
+    try:
+      data = request.args
+      road = data.get('road')
+      number = data.get('number')
+      city = data.get('city')
+      result = check_address_used(connection, road, number, city)
+      return (result, 200)
+    except:
+      return ('Error getting data', 400)
     
+  def delete(self):
+    connection = db_connection()
+    try:
+      data = request.get_json()
+      road = data.get('road')
+      number = data.get('number')
+      city = data.get('city')
+      result = delete_address(connection, road, number, city)
+      return (result, 200)
+    except:
+      return ('Error deleting data', 400)
+   
+      
+
 @api.route('/api/rents')
 class RentResource(Resource):
   def get(self):
@@ -402,14 +430,6 @@ class RentResource(Resource):
 
 @api.route('/api/driver/models')
 class DriverModels(Resource):
-    def get(self):
-        conn = db_connection()
-        if conn:
-            try:
-                return jsonify(getModels(conn))
-            finally:
-                conn.close()
-    
     def post(self):
         conn = db_connection()
         if conn:

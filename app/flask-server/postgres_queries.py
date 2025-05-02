@@ -89,6 +89,29 @@ def check_user_exists(connection, role, identifier):
     finally:
         cursor.close()
 
+def check_address_used(connection, road, number, city):
+    try:
+        cursor = connection.cursor()
+        query = """
+            SELECT %s AS road, %s AS number, %s AS city
+            WHERE (%s, %s, %s) NOT IN (
+                SELECT billing_road AS road, billing_number AS number, billing_city AS city
+                FROM taxischema.credit_card
+                UNION ALL
+                SELECT home_road AS road, home_number AS number, home_city AS city
+                FROM taxischema.client
+                UNION ALL
+                SELECT home_road AS road, home_number AS number, home_city AS city
+                FROM taxischema.driver);"""
+        cursor.execute(query, (road, number, city, road, number, city))
+        results = cursor.fetchall()
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
+
 def get_client_credit_cards(connection, client_email):
     try:
         cursor = connection.cursor()
@@ -206,6 +229,21 @@ def add_address(connection, road, number, city):
     finally:
         cursor.close()
 
+def delete_address(connection, road, number, city):
+    try:
+        cursor = connection.cursor()
+        query = """
+            DELETE FROM taxischema.address
+            WHERE road = %s AND number = %s AND city = %s;"""
+        cursor.execute(query, (road, number, city))
+        connection.commit()
+        results = cursor.rowcount > 0
+        return results
+    except psycopg2.Error as e:
+        print(f"Error executing query: {e}")
+        return None
+    finally:
+        cursor.close()
 
 def insert_client(connection, name, email, home_road, home_number, home_city):
     try:
@@ -283,6 +321,9 @@ def remove_client_credit_card(connection, email, card_number, billing_road, bill
                     UNION ALL
                     SELECT home_road AS road, home_number AS number, home_city AS city
                     FROM taxischema.client
+                    UNION ALL
+                    SELECT home_road AS road, home_number AS number, home_city AS city
+                    FROM taxischema.driver
                 )
                 DELETE FROM taxischema.address
                 WHERE road = %s AND number = %s AND city = %s

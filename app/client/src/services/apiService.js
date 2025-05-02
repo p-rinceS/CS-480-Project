@@ -115,6 +115,28 @@ export const deleteDriver = async (name) => {
   }
 };
 
+export const checkAddress = async (road, number, city) => {
+  try {
+    const response = await api.get("addresses", {
+      params: { road: road, number: number, city: city },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const deleteAddress = async (road, number, city) => {
+  try {
+    const response = await api.delete("addresses", {
+      data: { road: road, number: number, city: city },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
 export const getKClients = async (k) => {
   try {
     const response = await api.get("clients", { params: { k: k } });
@@ -137,7 +159,13 @@ export const getCityClients = async (city1, city2) => {
   }
 };
 
-export const addClient = async (name, email, homeRoad, homeNumber, homeCity) => {
+export const addClient = async (
+  name,
+  email,
+  homeRoad,
+  homeNumber,
+  homeCity
+) => {
   try {
     const response = await api.post("clients", {
       name: name,
@@ -199,18 +227,17 @@ export const getClientCreditCards = async (clientEmail) => {
   }
 };
 
-
 export const getAllDriversThatRented = async (client_email) => {
-    try {
-        const response = await api.post("drivers_that_were_rented", {
-            client_email: client_email
-        });
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
-}
+  try {
+    const response = await api.post("drivers_that_were_rented", {
+      client_email: client_email,
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
 export const addClientCreditCard = async (
   clientEmail,
@@ -256,89 +283,81 @@ export const deleteClientCreditCard = async (
   }
 };
 
-export const getAvailableCars = async (
-    date
-) => {
-    try {
-        const response = await api.post("get_available_cars", {
-            date: date,
-        });
-        console.log("Response: ", response);
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
+export const getAvailableCars = async (date) => {
+  try {
+    const response = await api.post("get_available_cars", {
+      date: date,
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
-}
-
-export const bookRent = async (
-    car_id,
-    model_id,
-    client_email,
-    date
-) => {
-    try {
-        const response = await api.post("book_rent", {
-            car_id: car_id,
-            model_id: model_id,
-            client_email: client_email,
-            date: date,
-        });
-        console.log("Response: ", response);
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
-}
+export const bookRent = async (car_id, model_id, client_email, date) => {
+  try {
+    const response = await api.post("book_rent", {
+      car_id: car_id,
+      model_id: model_id,
+      client_email: client_email,
+      date: date,
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
 export const getRentalHistory = async (client_email) => {
-    try {
-        const response = await api.post("get_rental_history", {
-            client_email: client_email,
-        });
-        console.log("Response: ", response);
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
-}
+  try {
+    const response = await api.post("get_rental_history", {
+      client_email: client_email,
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
 export const getDriverReviews = async (driver_email) => {
-    //placeholder
-}
+  //placeholder
+};
 
 export const getReviewableDrivers = async (client_email) => {
-    try {
-        const response = await api.post("get_reviewable_drivers", {
-            client_email: client_email,
-        });
-        console.log("Response: ", response);
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
-}
+  try {
+    const response = await api.post("get_reviewable_drivers", {
+      client_email: client_email,
+    });
+    console.log("Response: ", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
 export const writeReview = async (client_email, driver, rating, message) => {
-    try {
-        const response = await api.post("write_review", {
-            client_email: client_email,
-            driver: driver,
-            rating: rating,
-            message: message,
-        });
-        console.log("Response: ", response);
-        window.location.reload()
-        return response.data;
-    } catch (error) {
-        console.log("Error: ", error);
-        throw error;
-    }
-}
+  try {
+    const response = await api.post("write_review", {
+      client_email: client_email,
+      driver: driver,
+      rating: rating,
+      message: message,
+    });
+    console.log("Response: ", response);
+    window.location.reload();
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
 
 export const getDriverAddress = async (driverName) => {
   try {
@@ -369,7 +388,7 @@ export const getAssignedModels = async (driverName) => {
     const response = await api.get(`/driver/models/assigned/${driverName}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching assigned models:', error);
+    console.error("Error fetching assigned models:", error);
     return [];
   }
 };
@@ -379,7 +398,7 @@ export const getAvailableModels = async (driverName) => {
     const response = await api.get(`/driver/models/available/${driverName}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching available models:', error);
+    console.error("Error fetching available models:", error);
     return [];
   }
 };
@@ -389,10 +408,10 @@ export const assignDriverModel = async (driverName, modelId, carId) => {
     await api.post(`/driver/models/assign`, {
       driver_name: driverName,
       model_id: modelId,
-      car_id: carId
+      car_id: carId,
     });
   } catch (error) {
-    console.error('Error assigning model to driver:', error);
+    console.error("Error assigning model to driver:", error);
   }
 };
 
@@ -401,9 +420,9 @@ export const removeDriverModel = async (driverName, modelId, carId) => {
     await api.post(`/driver/models/remove`, {
       driver_name: driverName,
       model_id: modelId,
-      car_id: carId
+      car_id: carId,
     });
   } catch (error) {
-    console.error('Error removing model from driver:', error);
+    console.error("Error removing model from driver:", error);
   }
 };

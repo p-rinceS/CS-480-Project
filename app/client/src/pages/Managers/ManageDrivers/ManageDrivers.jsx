@@ -3,6 +3,8 @@ import "../Manager.css";
 import "./ManageDrivers.css";
 import {
   addDriver,
+  checkAddress,
+  deleteAddress,
   deleteDriver,
   getDrivers,
 } from "../../../services/apiService";
@@ -10,7 +12,9 @@ import Popup from "../../../components/Popup/Popup";
 
 const ManageDrivers = () => {
   const [drivers, setDrivers] = useState([]);
+  const [address, setAddress] = useState();
   const [showDriverPopup, setShowDriverPopup] = useState(false);
+  const [showAddressPopup, setShowAddressPopup] = useState(false);
 
   // Fetch driver info
   const fetchDrivers = async () => {
@@ -42,6 +46,25 @@ const ManageDrivers = () => {
     const homeCity = formData.get("homeCity");
 
     await addDriver(name, homeRoad, homeNumber, homeCity);
+  };
+
+  const handleDeleteDriver = async (driver) => {
+    await deleteDriver(driver.name);
+    await fetchDrivers();
+    const addressResponse = await checkAddress(
+      driver.homeRoad,
+      driver.homeNumber,
+      driver.homeCity
+    );
+    if (addressResponse.length > 0) {
+      const mappedAddress = addressResponse.map(([road, number, city]) => ({
+        road,
+        number,
+        city,
+      }))[0];
+      setAddress(mappedAddress);
+      setShowAddressPopup(true);
+    }
   };
 
   return (
@@ -78,9 +101,7 @@ const ManageDrivers = () => {
                 </div>
                 <button
                   className="delete-button"
-                  onClick={() =>
-                    deleteDriver(driver.name).then(() => fetchDrivers())
-                  }
+                  onClick={() => handleDeleteDriver(driver)}
                 >
                   Delete
                 </button>
@@ -108,6 +129,7 @@ const ManageDrivers = () => {
           ></input>
           <input
             name="homeNumber"
+            type="number"
             className="form-input"
             placeholder={"Number"}
             required
@@ -126,6 +148,23 @@ const ManageDrivers = () => {
           ></input>
           <button className="form-submit">Submit</button>
         </form>
+      </Popup>
+      <Popup show={showAddressPopup} onClose={() => setShowAddressPopup(false)}>
+        <h2>Address Has No More Links:</h2>
+        <h2>
+          {address && address.number + " " + address.road + ", " + address.city}
+        </h2>
+        <h2>Delete?</h2>
+        <button
+          onClick={() =>
+            deleteAddress(address.road, address.number, address.city).then(() =>
+              setShowAddressPopup(false)
+            )
+          }
+        >
+          Yes
+        </button>
+        <button onClick={() => setShowAddressPopup(false)}>No</button>
       </Popup>
     </>
   );

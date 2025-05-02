@@ -10,9 +10,7 @@ import {
 } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
 
-import App from "./pages/App/App.jsx";
 import Home from "./pages/Home/Home.jsx";
-import Test from "./pages/Test/Test.jsx";
 import Clients from "./pages/Clients/Clients.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Registration from "./pages/Registration/Registration.jsx";
@@ -56,22 +54,6 @@ createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute>
               <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/app"
-          element={
-            <PrivateRoute>
-              <App />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/test"
-          element={
-            <PrivateRoute>
-              <Test />
             </PrivateRoute>
           }
         />
