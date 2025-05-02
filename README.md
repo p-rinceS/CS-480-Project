@@ -28,10 +28,12 @@ Dane Nguyen
 ### Client
 
 1. Navigate to app/client
-2. Run `npm run build`
+2. Run `npm ci`
+3. Run `npm run build`
 
 ### Server
 
 1. Navigate to app/flask-server
-2. Run `python3 server.py`
-3. The application should now be running on `127.0.0.1:5000`
+2. Run `pip3 install -r requirements.txt`
+3. Run `python3 server.py`
+4. The application should now be running on `127.0.0.1:5000`
