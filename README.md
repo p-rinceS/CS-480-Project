@@ -8,27 +8,27 @@ Dane Nguyen
 
 # Setting up postgres
 
-1. Create a pgsql db server locally.
+1. Create a pgsql database locally.
 
 2. Make the credentials the same as below.
 
 ### Credentials
 
 - host = 127.0.0.1
-- default username = postgres
-- default password = password
-- database name = postgres_db
-
-3. Start the pgsql server
+- port = 5432
+- username = postgres
+- password = password
+- database name = postgres
 
 # How to run app
 
-1. Follow instructions for client and server below:
+1. Start the pgsql server
+2. Follow instructions for client and server below:
 
 ### Client
 
 1. Navigate to app/client
-1. Run `npm run build`
+2. Run `npm run build`
 
 ### Server
 
