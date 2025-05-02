@@ -14,17 +14,17 @@ VALUES
   ('Birch Road', 301, 'Capital City');
 
 
-INSERT INTO taxischema.client (name, email, home_road, home_number, home_city)
+INSERT INTO taxischema.client (name, email)
 VALUES
-  ('John Doe', 'john.doe@example.com', 'Elm Street', 123, 'Springfield'),
-  ('John Smith', 'john.smith@example.com', 'Elm Street', 124, 'Springfield'),
-  ('Jane Doe', 'jane.doe@example.com', 'Maple Avenue', 456, 'Shelbyville'),
-  ('Robert Brown', 'robert.brown@example.com', 'Pine Road', 789, 'Ogdenville'),
-  ('Robert Green', 'robert.green@example.com', 'Pine Road', 790, 'Ogdenville'),
-  ('Alice White', 'alice.white@example.com', 'Oak Boulevard', 101, 'North Haverbrook'),
-  ('Charlie Green', 'charlie.green@example.com', 'Cedar Lane', 202, 'Capital City'),
-  ('Eva Blue', 'eva.blue@example.com', 'Cedar Lane', 203, 'Capital City'),
-  ('George Clark', 'george.clark@example.com', 'Cedar Lane', 202, 'Capital City');
+  ('John Doe', 'john.doe@example.com'),
+  ('John Smith', 'john.smith@example.com'),
+  ('Jane Doe', 'jane.doe@example.com'),
+  ('Robert Brown', 'robert.brown@example.com'),
+  ('Robert Green', 'robert.green@example.com'),
+  ('Alice White', 'alice.white@example.com'),
+  ('Charlie Green', 'charlie.green@example.com'),
+  ('Eva Blue', 'eva.blue@example.com'),
+  ('George Clark', 'george.clark@example.com');
 
 
 INSERT INTO taxischema.credit_card (number, client_email, billing_road, billing_number, billing_city)
@@ -475,6 +475,7 @@ VALUES
   ('robert.green@example.com', 'Pine Road', 790, 'Ogdenville'),
   ('alice.white@example.com', 'Oak Boulevard', 101, 'North Haverbrook'),
   ('charlie.green@example.com', 'Cedar Lane', 202, 'Capital City'),
-  ('eva.blue@example.com', 'Cedar Lane', 203, 'Capital City');
+  ('eva.blue@example.com', 'Cedar Lane', 203, 'Capital City'),
+  ('george.clark@example.com', 'Cedar Lane', 202, 'Capital City');
 
 DROP SCHEMA taxischema CASCADE;

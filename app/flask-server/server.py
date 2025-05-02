@@ -373,10 +373,8 @@ class ClientResource(Resource):
         data = request.get_json()
         name = data.get('name')
         email = data.get('email')
-        home_road = data.get('homeRoad')
-        home_number = data.get('homeNumber')
-        home_city = data.get('homeCity')
-        result = insert_client(connection, name, email, home_road, home_number, home_city)
+        addresses = data.get('addresses')
+        result = insert_client(connection, name, email, addresses)
         return (result, 200)
       except:
         return ('Error getting data', 400)

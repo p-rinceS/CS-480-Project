@@ -159,20 +159,12 @@ export const getCityClients = async (city1, city2) => {
   }
 };
 
-export const addClient = async (
-  name,
-  email,
-  homeRoad,
-  homeNumber,
-  homeCity
-) => {
+export const addClient = async (name, email, addresses) => {
   try {
     const response = await api.post("clients", {
       name: name,
       email: email,
-      homeRoad: homeRoad,
-      homeNumber: homeNumber,
-      homeCity: homeCity,
+      addresses: addresses,
     });
     return response.data;
   } catch (error) {

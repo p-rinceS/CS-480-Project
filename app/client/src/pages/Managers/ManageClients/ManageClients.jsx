@@ -39,6 +39,7 @@ const ManageClients = () => {
           <h2>Clients</h2>
           <div className="client-filters">
             <form onSubmit={(event) => handleGetKClients(event)}>
+              <h4>Top K Clients by Rent</h4>
               <input
                 name="k"
                 className="form-input"
@@ -48,6 +49,7 @@ const ManageClients = () => {
               <button className="form-submit">Submit</button>
             </form>
             <form onSubmit={(event) => handleGetCityClients(event)}>
+              <h4>City1 Clients Who Rented From City2 Driver</h4>
               <input
                 name="city1"
                 className="form-input"

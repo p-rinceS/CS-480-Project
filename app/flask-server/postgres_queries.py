@@ -99,10 +99,10 @@ def check_address_used(connection, road, number, city):
                 FROM taxischema.credit_card
                 UNION ALL
                 SELECT home_road AS road, home_number AS number, home_city AS city
-                FROM taxischema.client
+                FROM taxischema.driver
                 UNION ALL
                 SELECT home_road AS road, home_number AS number, home_city AS city
-                FROM taxischema.driver);"""
+                FROM taxischema.client_address);"""
         cursor.execute(query, (road, number, city, road, number, city))
         results = cursor.fetchall()
         return results
@@ -245,22 +245,31 @@ def delete_address(connection, road, number, city):
     finally:
         cursor.close()
 
-def insert_client(connection, name, email, home_road, home_number, home_city):
+def insert_client(connection, name, email, addresses):
     try:
         cursor = connection.cursor()
-        query1 ='''
-            INSERT INTO taxischema.address (road, number, city)
-            SELECT %s, %s, %s
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM taxischema.address
-                WHERE road = %s AND number = %s AND city = %s
-            )'''
-        query2 = '''
-            INSERT INTO taxischema.client (name, email, home_road, home_number, home_city)
-            VALUES (%s, %s, %s, %s, %s);'''
-        cursor.execute(query1, (home_road, home_number, home_city, home_road, home_number, home_city))
-        cursor.execute(query2, (name, email, home_road, home_number, home_city))
+        query1 = '''
+            INSERT INTO taxischema.client (name, email)
+            VALUES (%s, %s);'''
+        cursor.execute(query1, (name, email))
+
+        for address in addresses:
+            home_road = address.get('homeRoad')
+            home_number = address.get('homeNumber')
+            home_city = address.get('homeCity')
+            query2 ='''
+                INSERT INTO taxischema.address (road, number, city)
+                SELECT %s, %s, %s
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM taxischema.address
+                    WHERE road = %s AND number = %s AND city = %s
+                )'''
+            query3 = '''
+                INSERT INTO taxischema.client_address (client_email, home_road, home_number, home_city)
+                VALUES (%s, %s, %s, %s)'''
+            cursor.execute(query2, (home_road, home_number, home_city, home_road, home_number, home_city))
+            cursor.execute(query3, (email, home_road, home_number, home_city))
         connection.commit()
         results = cursor.rowcount > 0
         return results
@@ -320,10 +329,10 @@ def remove_client_credit_card(connection, email, card_number, billing_road, bill
                     FROM taxischema.credit_card
                     UNION ALL
                     SELECT home_road AS road, home_number AS number, home_city AS city
-                    FROM taxischema.client
+                    FROM taxischema.driver
                     UNION ALL
                     SELECT home_road AS road, home_number AS number, home_city AS city
-                    FROM taxischema.driver
+                    FROM taxischema.client_address
                 )
                 DELETE FROM taxischema.address
                 WHERE road = %s AND number = %s AND city = %s
