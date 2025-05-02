@@ -272,10 +272,10 @@ def insert_client(connection, name, email, addresses, cards):
             cursor.execute(query3, (email, home_road, home_number, home_city))
         
         for card in cards:
-            card_number = address.get('cardNumber')
-            billing_road = address.get('billingRoad')
-            billing_number = address.get('billingNumber')
-            billing_city = address.get('billingCity')
+            card_number = card.get('cardNumber')
+            billing_road = card.get('billingRoad')
+            billing_number = card.get('billingNumber')
+            billing_city = card.get('billingCity')
             add_client_credit_card(connection, email, card_number, billing_road, billing_number, billing_city)
         connection.commit()
         results = cursor.rowcount > 0
